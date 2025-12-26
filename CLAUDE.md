@@ -6,6 +6,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a Next.js 16 application built with React 19, TypeScript, and Tailwind CSS v4. The project uses the App Router architecture and includes shadcn/ui components for the UI layer, with Prisma as the database ORM.
 
+The project itself is a minimalistic, modern landing page for packaging company with download price-list feature and catalog fetched from database.
+
+## Features
+
+- Admin panel with authentication of an admin, modern minimalistic beautiful dashboard for managing products, it's categories, uploaded price-lists files
+- Download relevant price-list for users on the home-page
+- Catalog of the products with search, filters, categories on /catalog
+
 ## Commands
 
 ### Development
