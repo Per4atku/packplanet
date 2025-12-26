@@ -1,0 +1,64 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.*
+.yarn/
+
+# Testing
+/coverage
+*.lcov
+.nyc_output
+
+# Next.js
+/.next/
+/out/
+next-env.d.ts
+.vercel
+
+# Build outputs
+/build
+/dist
+*.tsbuildinfo
+
+# Environment variables
+.env
+.env*.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Prisma
+/prisma/migrations/**/migration.sql
+
+# IDE and editors
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Debug
+.pnpm-debug.log
+
+# OS
+Thumbs.db
+
+# Local development
+.claude/
