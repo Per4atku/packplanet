@@ -4,6 +4,11 @@ node_modules/
 .pnp.*
 .yarn/
 
+# Claude Tasks
+
+/tasks
+/tasks/*
+
 # Testing
 /coverage
 *.lcov

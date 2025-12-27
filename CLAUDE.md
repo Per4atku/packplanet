@@ -101,12 +101,12 @@ prisma/
 - Tailwind CSS v4 with PostCSS integration
 - CSS variables for theming (defined in `globals.css`)
 - `cn()` utility function combines clsx and tailwind-merge for className handling
-- Dark mode support configured via CSS variables
-- Geist Sans and Geist Mono fonts loaded via next/font
+- Dark mode support configured via CSS variables (however no dark mode is needed)
+- Inter font loaded via next/font
 
 ### Database Integration
 
-- Prisma Client is generated to `src/generated/prisma/` (non-standard location)
+- Prisma Client is generated to `src/generated/prisma/`
 - Import Prisma Client: `import { PrismaClient } from '@/generated/prisma'`
 - Database provider: PostgreSQL
 - Connection string from `process.env.DATABASE_URL`
