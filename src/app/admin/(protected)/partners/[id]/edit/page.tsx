@@ -29,8 +29,8 @@ export default async function EditPartnerPage({
   return (
     <div className="max-w-2xl space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Edit Partner</h1>
-        <p className="text-neutral-600">Update partner information</p>
+        <h1 className="text-3xl font-bold">Редактировать партнера</h1>
+        <p className="text-neutral-600">Обновить информацию о партнере</p>
       </div>
       <PartnerForm partner={partner} />
     </div>

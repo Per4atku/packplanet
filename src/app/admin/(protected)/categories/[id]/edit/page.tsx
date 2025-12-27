@@ -29,8 +29,8 @@ export default async function EditCategoryPage({
   return (
     <div className="max-w-2xl space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Edit Category</h1>
-        <p className="text-neutral-600">Update category information</p>
+        <h1 className="text-3xl font-bold">Редактировать категорию</h1>
+        <p className="text-neutral-600">Обновить информацию о категории</p>
       </div>
       <CategoryForm category={category} />
     </div>

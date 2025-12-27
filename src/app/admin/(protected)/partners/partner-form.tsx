@@ -31,30 +31,30 @@ export function PartnerForm({ partner }: PartnerFormProps) {
       <CardContent className="pt-6">
         <form action={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="name">Partner Name *</Label>
+            <Label htmlFor="name">Название партнера *</Label>
             <Input
               id="name"
               name="name"
               required
               defaultValue={partner?.name}
-              placeholder="e.g., Acme Corporation"
+              placeholder="напр., Корпорация Акме"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description">Описание</Label>
             <Textarea
               id="description"
               name="description"
               rows={4}
               defaultValue={partner?.description}
-              placeholder="Brief description of the partner..."
+              placeholder="Краткое описание партнера..."
             />
           </div>
 
           {partner?.image && (
             <div className="space-y-2">
-              <Label>Current Logo</Label>
+              <Label>Текущий логотип</Label>
               <div className="relative h-32 w-32">
                 <Image
                   src={partner.image}
@@ -68,17 +68,17 @@ export function PartnerForm({ partner }: PartnerFormProps) {
 
           <div className="space-y-2">
             <Label htmlFor="image">
-              {partner ? "Replace Logo" : "Partner Logo"}
+              {partner ? "Заменить логотип" : "Логотип партнера"}
             </Label>
             <Input id="image" name="image" type="file" accept="image/*" />
             <p className="text-sm text-neutral-500">
-              Upload partner logo (PNG, JPG, SVG recommended)
+              Загрузите логотип партнера (рекомендуется PNG, JPG, SVG)
             </p>
           </div>
 
           <div className="flex gap-3">
             <Button type="submit">
-              {partner ? "Update Partner" : "Create Partner"}
+              {partner ? "Обновить партнера" : "Создать партнера"}
             </Button>
             <Button
               type="button"
@@ -86,7 +86,7 @@ export function PartnerForm({ partner }: PartnerFormProps) {
               onClick={() => router.back()}
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Cancel
+              Отмена
             </Button>
           </div>
         </form>

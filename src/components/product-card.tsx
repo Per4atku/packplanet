@@ -14,8 +14,8 @@ interface ProductCardProps {
   imageSize?: string;
   sku?: string;
   unit?: string;
-  wholesalePrice?: number;
-  wholesaleAmount?: number;
+  wholesalePrice?: number | null;
+  wholesaleAmount?: number | null;
 }
 
 export function ProductCard({

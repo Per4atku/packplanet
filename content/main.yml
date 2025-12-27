@@ -1,0 +1,98 @@
+# Main Page Content Configuration
+# Edit this file to change text on the main page
+
+# Site Info
+site:
+  name: "Планета Упаковки"
+  shortName: "П"
+  tagline: "Одноразовая посуда и упаковка."
+  taglineExtended: "Одноразовая посуда и упаковка.\nБыстрая доставка по всей России."
+
+# Header Navigation
+header:
+  nav:
+    catalog: "Каталог"
+    priceList: "Прайс-Лист"
+    delivery: "Условия Доставки"
+    contacts: "Контакты"
+  phone: "8 (800) 234-78-76"
+
+# Hero Section
+hero:
+  title: "Ваш надежный поставщик"
+  titleHighlight: "упаковки"
+  subtitle: "Одноразовая посуда и упаковка.\nБыстрая доставка"
+  buttons:
+    priceList: "Прайс-лист"
+    contact: "Связаться с нами"
+
+# Featured Products Section
+featuredProducts:
+  heading: "Популярные Товары"
+  ctaCard:
+    title: "Перейти в Каталог"
+    description: "Откройте полный каталог продукции"
+
+# Price List Section
+priceList:
+  heading: "Прайс-Лист"
+  description: "Скачайте актуальный прайс-лист со всей продукцией и ценами"
+  downloadButton: "Скачать прайс-лист"
+
+# Partners Section
+partners:
+  heading: "Наши Партнеры"
+
+# Delivery Section
+delivery:
+  heading: "Доставка"
+  headingHighlight: "БЕСПЛАТНАЯ*"
+  conditions:
+    - text: "* от 2000₽ (Центр, 1-ая Речка, Некрасовская, Третья рабочая)"
+    - text: "* от 3000₽ (Отдаленные районы города)"
+  minOrderDelivery: "На заказ менее 2000₽ — доставка"
+  minOrderDeliveryPrice: "450₽"
+
+# Contact Section
+contacts:
+  heading: "Свяжитесь с нами"
+  description: "Заходите к нам, звоните или пишите — мы всегда готовы помочь вам!"
+  cardTitle: "Контактная информация"
+  address:
+    label: "Адрес"
+    value: "Владивосток, Океанский проспект 54, 2 этаж"
+  workingHours:
+    label: "Время работы"
+    weekdays: "Пн—Пт: 10:00—18:00"
+    weekends: "Сб—Вс: 10:00—17:00"
+  phone:
+    label: "Телефоны"
+    numbers:
+      - "8 (800) 234-78-76"
+      - "+7 (421) 244-48-55"
+      - "+7 (423) 246-24-76"
+  email:
+    label: "Почта"
+    value: "sinfo@wsk.ru"
+  mapButton: "Перейти в Яндекс-Карты"
+
+# Footer
+footer:
+  quickLinks:
+    title: "Разделы сайта"
+    catalog: "Каталог"
+    priceList: "Прайс-Лист"
+    delivery: "Условия Доставки"
+    contacts: "Контакты"
+  contactsSection:
+    title: "Контакты"
+    phones:
+      - "8 (800) 234-78-76"
+      - "+7 (421) 244-48-55"
+    email: "office@pack.ru"
+  workingHours:
+    title: "График работы"
+    weekdays: "Пн—Пт: 10:00—18:00"
+    weekends: "Сб—Вс: 10:00—17:00"
+    address: "Владивосток, Океанский проспект 54, 2 этаж,\nНиколаевск, Тихая, Миша"
+  copyright: "© 2025 Проект Планеты. Все права защищены."

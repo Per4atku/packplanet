@@ -8,10 +8,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+interface Category {
+  id: string;
+  name: string;
+}
+
 interface CategorySelectorProps {
   value: string;
   onChange: (value: string) => void;
-  categories: string[];
+  categories: Category[];
 }
 
 export function CategorySelector({
@@ -26,11 +31,8 @@ export function CategorySelector({
       </SelectTrigger>
       <SelectContent>
         {categories.map((category) => (
-          <SelectItem
-            key={category}
-            value={category === "Все категории" ? "all" : category}
-          >
-            {category}
+          <SelectItem key={category.id || "all"} value={category.id}>
+            {category.name}
           </SelectItem>
         ))}
       </SelectContent>

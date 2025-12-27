@@ -18,8 +18,8 @@ export default async function NewProductPage() {
   return (
     <div className="max-w-3xl space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Add New Product</h1>
-        <p className="text-neutral-600">Create a new product in your catalog</p>
+        <h1 className="text-3xl font-bold">Добавить новый товар</h1>
+        <p className="text-neutral-600">Создайте новый товар в вашем каталоге</p>
       </div>
       <ProductForm categories={categories} />
     </div>

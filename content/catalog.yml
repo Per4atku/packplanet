@@ -1,0 +1,33 @@
+# Catalog Page Content Configuration
+# Edit this file to change text on the catalog page
+
+# Page Metadata
+page:
+  title: "Каталог - Планета Упаковки"
+  description: "Полный каталог упаковочной продукции и одноразовой посуды"
+
+# Page Header
+header:
+  heading: "Каталог Продукции"
+
+# Filters and Search
+filters:
+  allCategories: "Все категории"
+
+# Results
+results:
+  found: "Найдено товаров:"
+  updating: "(обновление...)"
+
+# Pagination
+pagination:
+  previous: "Назад"
+  next: "Вперед"
+  ellipsis: "..."
+
+# Product Card (common text)
+product:
+  priceLabel: "руб"
+  wholesalePriceLabel: "Опт"
+  minOrderLabel: "от"
+  hot: "Горячий"

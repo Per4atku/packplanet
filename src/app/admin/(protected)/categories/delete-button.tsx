@@ -13,12 +13,12 @@ export function DeleteCategoryButton({
   const handleDelete = async () => {
     if (hasProducts) {
       alert(
-        "Cannot delete category with products. Please move or delete all products first."
+        "Невозможно удалить категорию с товарами. Пожалуйста, сначала переместите или удалите все товары."
       );
       return;
     }
 
-    if (confirm("Are you sure you want to delete this category?")) {
+    if (confirm("Вы уверены, что хотите удалить эту категорию?")) {
       await deleteCategory(categoryId);
     }
   };
@@ -33,7 +33,7 @@ export function DeleteCategoryButton({
       }`}
     >
       <Trash2 className="h-4 w-4" />
-      Delete
+      Удалить
     </div>
   );
 }

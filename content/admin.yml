@@ -1,0 +1,235 @@
+# Admin Dashboard Content Configuration
+# Edit this file to change text in the admin dashboard
+
+# Site Name
+site:
+  name: "Планета Упаковки"
+
+# Login Page
+login:
+  title: "Вход в админ-панель"
+  description: "Войдите, чтобы получить доступ к панели управления"
+  usernameLabel: "Имя пользователя"
+  passwordLabel: "Пароль"
+  submitButton: "Войти"
+
+# Navigation
+navigation:
+  search: "Поиск"
+  dashboard: "Панель управления"
+  products: "Товары"
+  categories: "Категории"
+  partners: "Партнеры"
+  priceList: "Прайс-лист"
+  notifications: "Уведомления"
+  helpSupport: "Помощь и поддержка"
+  settings: "Настройки"
+  administrator: "Администратор"
+
+# Common Actions
+actions:
+  export: "Экспорт"
+  import: "Импорт"
+  allFilters: "Все фильтры"
+  edit: "Редактировать"
+  delete: "Удалить"
+  cancel: "Отмена"
+  download: "Скачать"
+
+# Products Page
+products:
+  title: "Товары"
+  description: "Управление каталогом товаров и инвентаризацией"
+  addButton: "Добавить товар"
+
+  stats:
+    totalProducts: "Всего товаров"
+    totalProductsDesc: "Активных в каталоге"
+    hotProducts: "Горячие товары"
+    hotProductsDesc: "Избранные позиции"
+    categories: "Категории"
+    categoriesDesc: "Групп товаров"
+    avgPrice: "Средняя цена"
+    avgPriceDesc: "Средняя цена товара"
+
+  table:
+    product: "Товар"
+    sku: "Артикул"
+    category: "Категория"
+    price: "Цена"
+    unit: "Единица"
+    status: "Статус"
+    actions: "Действия"
+
+  empty:
+    title: "Товары не найдены"
+    description: "Создайте свой первый товар, чтобы начать"
+
+  status:
+    hot: "Горячий"
+    active: "Активный"
+
+  images: "изображений"
+
+# Categories Page
+categories:
+  title: "Категории"
+  description: "Управление категориями товаров и организацией"
+  addButton: "Добавить категорию"
+
+  stats:
+    totalCategories: "Всего категорий"
+    totalCategoriesDesc: "Групп товаров"
+    totalProducts: "Всего товаров"
+    totalProductsDesc: "Во всех категориях"
+    avgPerCategory: "В среднем на категорию"
+    avgPerCategoryDesc: "Товаров на категорию"
+    largestCategory: "Крупнейшая категория"
+    largestCategoryDesc: "Больше всего товаров"
+
+  table:
+    category: "Категория"
+    products: "Товары"
+    actions: "Действия"
+    productsCount: "товаров"
+
+  empty:
+    title: "Категории не найдены"
+    description: "Создайте свою первую категорию, чтобы начать"
+
+# Partners Page
+partners:
+  title: "Партнеры"
+  description: "Управление бизнес-партнерами"
+  addButton: "Добавить партнера"
+
+  stats:
+    totalPartners: "Всего партнеров"
+    totalPartnersDesc: "Активных партнерств"
+    withLogos: "С логотипами"
+    withLogosDesc: "Партнеров с логотипами"
+    withDescription: "С описанием"
+    withDescriptionDesc: "Полные профили"
+    completionRate: "Процент заполнения"
+    completionRateDesc: "Заполненность профилей"
+
+  table:
+    partner: "Партнер"
+    description: "Описание"
+    actions: "Действия"
+    noDescription: "Без описания"
+
+  empty:
+    title: "Партнеры не найдены"
+    description: "Добавьте своего первого партнера, чтобы начать"
+
+# Price List Page
+priceList:
+  title: "Прайс-лист"
+  description: "Управление файлом прайс-листа для скачивания"
+
+  stats:
+    currentFile: "Текущий файл"
+    currentFileDesc: "Активный прайс-лист"
+    lastUpdated: "Последнее обновление"
+    lastUpdatedSuffix: "дн. назад"
+    status: "Статус"
+    statusActive: "Активный"
+    statusDesc: "Доступен для скачивания"
+
+  currentSection:
+    title: "Текущий прайс-лист"
+    statusBadge: "Активный"
+    filenameLabel: "Имя файла"
+    uploadedOn: "Загружено"
+    downloadButton: "Скачать"
+    deleteButton: "Удалить"
+
+  uploadSection:
+    titleNew: "Загрузить прайс-лист"
+    titleUpdate: "Загрузить новый прайс-лист"
+    noteUpdate: "Примечание:"
+    noteUpdateText: "Загрузка нового файла заменит существующий прайс-лист. Старый файл будет безвозвратно удален."
+    noteFirst: "Загрузите ваш первый"
+    noteFirstText: "файл прайс-листа. Поддерживаемые форматы: PDF, Excel, Word и другие документы."
+
+# Product Form
+productForm:
+  newTitle: "Добавить новый товар"
+  newDescription: "Создайте новый товар в вашем каталоге"
+  editTitle: "Редактировать товар"
+  editDescription: "Обновить информацию о товаре"
+
+  fields:
+    sku: "Артикул"
+    name: "Название"
+    description: "Описание"
+    price: "Цена"
+    unit: "Единица измерения"
+    unitPlaceholder: "напр., шт, кг, упак"
+    category: "Категория"
+    categoryPlaceholder: "Выберите категорию"
+    wholesalePrice: "Оптовая цена"
+    wholesaleAmount: "Минимальное количество для опта"
+    heatProduct: "Отметить как горячий товар"
+    currentImages: "Текущие изображения"
+    addMoreImages: "Добавить еще изображения"
+    images: "Изображения"
+    imagesHelp: "Загрузите изображения товара (можно несколько файлов)"
+
+  buttons:
+    create: "Создать товар"
+    update: "Обновить товар"
+    cancel: "Отмена"
+
+  confirmDelete: "Вы уверены, что хотите удалить это изображение?"
+  confirmDeleteProduct: "Вы уверены, что хотите удалить этот товар?"
+
+# Category Form
+categoryForm:
+  newTitle: "Добавить новую категорию"
+  newDescription: "Создайте новую категорию товаров"
+  editTitle: "Редактировать категорию"
+  editDescription: "Обновить информацию о категории"
+
+  fields:
+    name: "Название категории"
+    namePlaceholder: "напр., Упаковочные материалы, Этикетки, Коробки"
+
+  buttons:
+    create: "Создать категорию"
+    update: "Обновить категорию"
+    cancel: "Отмена"
+
+  confirmDelete: "Вы уверены, что хотите удалить эту категорию?"
+  cannotDelete: "Невозможно удалить категорию с товарами. Пожалуйста, сначала переместите или удалите все товары."
+
+# Partner Form
+partnerForm:
+  newTitle: "Добавить нового партнера"
+  newDescription: "Добавьте нового бизнес-партнера"
+  editTitle: "Редактировать партнера"
+  editDescription: "Обновить информацию о партнере"
+
+  fields:
+    name: "Название партнера"
+    namePlaceholder: "напр., Корпорация Акме"
+    description: "Описание"
+    descriptionPlaceholder: "Краткое описание партнера..."
+    currentLogo: "Текущий логотип"
+    replaceLogo: "Заменить логотип"
+    logo: "Логотип партнера"
+    logoHelp: "Загрузите логотип партнера (рекомендуется PNG, JPG, SVG)"
+
+  buttons:
+    create: "Создать партнера"
+    update: "Обновить партнера"
+    cancel: "Отмена"
+
+  confirmDelete: "Вы уверены, что хотите удалить этого партнера?"
+
+# Upload Form
+uploadForm:
+  fileLabel: "Файл прайс-листа"
+  uploadingButton: "Загрузка..."
+  uploadButton: "Загрузить прайс-лист"

@@ -64,20 +64,20 @@ export default async function CategoriesPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-neutral-900">Categories</h1>
+          <h1 className="text-3xl font-bold text-neutral-900">Категории</h1>
           <p className="text-neutral-600 mt-1">
-            Manage product categories and organization
+            Управление категориями товаров и организацией
           </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" className="gap-2">
             <Download className="h-4 w-4" />
-            Export
+            Экспорт
           </Button>
           <Link href="/admin/categories/new">
             <Button className="gap-2">
               <Plus className="h-4 w-4" />
-              Add Category
+              Добавить категорию
             </Button>
           </Link>
         </div>
@@ -86,27 +86,27 @@ export default async function CategoriesPage() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatsCard
-          title="Total Categories"
+          title="Всего категорий"
           value={totalCategories}
-          description="Product groups"
+          description="Групп товаров"
           icon={FolderTree}
         />
         <StatsCard
-          title="Total Products"
+          title="Всего товаров"
           value={totalProducts}
-          description="Across all categories"
+          description="Во всех категориях"
           icon={Package}
         />
         <StatsCard
-          title="Avg. per Category"
+          title="В среднем на категорию"
           value={avgProductsPerCategory.toFixed(1)}
-          description="Products per category"
+          description="Товаров на категорию"
           icon={FolderTree}
         />
         <StatsCard
-          title="Largest Category"
+          title="Крупнейшая категория"
           value={largestCategory}
-          description="Most products"
+          description="Больше всего товаров"
           icon={Package}
         />
       </div>
@@ -118,7 +118,7 @@ export default async function CategoriesPage() {
           <div className="flex items-center justify-between p-6 border-b border-neutral-200">
             <div className="flex gap-2">
               <Button variant="outline" size="sm">
-                All filters
+                Все фильтры
               </Button>
             </div>
           </div>
@@ -127,13 +127,13 @@ export default async function CategoriesPage() {
             <TableHeader>
               <TableRow className="hover:bg-transparent border-neutral-200">
                 <TableHead className="font-semibold text-neutral-900">
-                  Category
+                  Категория
                 </TableHead>
                 <TableHead className="font-semibold text-neutral-900">
-                  Products
+                  Товары
                 </TableHead>
                 <TableHead className="text-right font-semibold text-neutral-900">
-                  Actions
+                  Действия
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -146,9 +146,9 @@ export default async function CategoriesPage() {
                   >
                     <div className="flex flex-col items-center gap-2">
                       <FolderTree className="h-8 w-8 text-neutral-400" />
-                      <p>No categories found</p>
+                      <p>Категории не найдены</p>
                       <p className="text-sm">
-                        Create your first category to get started
+                        Создайте свою первую категорию, чтобы начать
                       </p>
                     </div>
                   </TableCell>
@@ -171,7 +171,7 @@ export default async function CategoriesPage() {
                     </TableCell>
                     <TableCell>
                       <Badge variant="secondary" className="font-normal">
-                        {category._count.products} products
+                        {category._count.products} товаров
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
@@ -192,7 +192,7 @@ export default async function CategoriesPage() {
                               className="flex items-center gap-2"
                             >
                               <Pencil className="h-4 w-4" />
-                              Edit
+                              Редактировать
                             </Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem asChild>

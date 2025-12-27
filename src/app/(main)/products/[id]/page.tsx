@@ -1,11 +1,11 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ProductCarousel } from "@/components/product-carousel";
-import { products } from "@/data/products";
+import { getProductById, getLinkedProducts } from "@/lib/queries/products";
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Package, Flame } from "lucide-react";
+import { ArrowLeft, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/product-card";
 import { SectionHeading } from "@/components/section-heading";
@@ -18,7 +18,7 @@ export async function generateMetadata({
   params,
 }: ProductPageProps): Promise<Metadata> {
   const { id } = await params;
-  const product = products.find((p) => p.id === id);
+  const product = await getProductById(id);
 
   if (!product) {
     return {
@@ -34,15 +34,15 @@ export async function generateMetadata({
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { id } = await params;
-  const product = products.find((p) => p.id === id);
+  const product = await getProductById(id);
 
   if (!product) {
     notFound();
   }
 
   // Get related products
-  const relatedProducts = product.linked_products
-    ? products.filter((p) => product.linked_products?.includes(p.id))
+  const relatedProducts = product.linkedProductIds.length > 0
+    ? await getLinkedProducts(product.linkedProductIds)
     : [];
 
   return (
@@ -103,17 +103,17 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   </p>
                 </div>
 
-                {product.wholesale_price && product.wholesale_amount && (
+                {product.wholesalePrice && product.wholesaleAmount && (
                   <div className="rounded-lg bg-muted p-4">
                     <p className="mb-1 text-sm font-semibold">Оптовая цена</p>
                     <p className="text-xl font-bold">
-                      {product.wholesale_price} руб
+                      {product.wholesalePrice} руб
                       <span className="text-sm text-muted-foreground">
                         /{product.unit}
                       </span>
                     </p>
                     <p className="mt-1 text-sm text-muted-foreground">
-                      При заказе от {product.wholesale_amount} {product.unit}
+                      При заказе от {product.wholesaleAmount} {product.unit}
                     </p>
                   </div>
                 )}
@@ -132,7 +132,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </div>
                 <div className="flex justify-between border-b pb-2">
                   <span className="text-muted-foreground">Категория</span>
-                  <span className="font-semibold">{product.category}</span>
+                  <span className="font-semibold">{product.category.name}</span>
                 </div>
                 <div className="flex justify-between border-b pb-2">
                   <span className="text-muted-foreground">
@@ -192,9 +192,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     image={relatedProduct.images[0]}
                     sku={relatedProduct.sku}
                     unit={relatedProduct.unit}
-                    wholesalePrice={relatedProduct.wholesale_price}
-                    wholesaleAmount={relatedProduct.wholesale_amount}
-                    isHot={relatedProduct.heat_product}
+                    wholesalePrice={relatedProduct.wholesalePrice}
+                    wholesaleAmount={relatedProduct.wholesaleAmount}
+                    isHot={relatedProduct.heatProduct}
                   />
                 </Link>
               ))}

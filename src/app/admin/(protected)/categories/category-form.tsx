@@ -29,19 +29,19 @@ export function CategoryForm({ category }: CategoryFormProps) {
       <CardContent className="pt-6">
         <form action={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="name">Category Name *</Label>
+            <Label htmlFor="name">Название категории *</Label>
             <Input
               id="name"
               name="name"
               required
               defaultValue={category?.name}
-              placeholder="e.g., Packaging Materials, Labels, Boxes"
+              placeholder="напр., Упаковочные материалы, Этикетки, Коробки"
             />
           </div>
 
           <div className="flex gap-3">
             <Button type="submit">
-              {category ? "Update Category" : "Create Category"}
+              {category ? "Обновить категорию" : "Создать категорию"}
             </Button>
             <Button
               type="button"
@@ -49,7 +49,7 @@ export function CategoryForm({ category }: CategoryFormProps) {
               onClick={() => router.back()}
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Cancel
+              Отмена
             </Button>
           </div>
         </form>

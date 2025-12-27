@@ -35,8 +35,8 @@ export default async function EditProductPage({
   return (
     <div className="max-w-3xl space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Edit Product</h1>
-        <p className="text-neutral-600">Update product information</p>
+        <h1 className="text-3xl font-bold">Редактировать товар</h1>
+        <p className="text-neutral-600">Обновить информацию о товаре</p>
       </div>
       <ProductForm product={product} categories={categories} />
     </div>

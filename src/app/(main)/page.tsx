@@ -6,8 +6,14 @@ import { SectionHeading } from "@/components/section-heading";
 import { Space } from "@/components/space";
 import { Download, Mail, MapPin, Phone, Clock, Package } from "lucide-react";
 import Link from "next/link";
+import { getFeaturedProducts, getLatestPriceList } from "@/lib/queries/products";
 
-export default function Home() {
+export default async function Home() {
+  // Fetch featured products and latest price list
+  const [featuredProducts, priceList] = await Promise.all([
+    getFeaturedProducts(3),
+    getLatestPriceList(),
+  ]);
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -46,54 +52,52 @@ export default function Home() {
 
       <Space size="2xl" />
 
-      {/* Popular Products Section */}
-      <section className="containerize py-12 md:py-16">
-        <SectionHeading>Популярные Товары</SectionHeading>
+      {/* Featured Products Section */}
+      {featuredProducts.length > 0 && (
+        <section className="containerize py-12 md:py-16">
+          <SectionHeading>Популярные Товары</SectionHeading>
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          <ProductCard
-            name="Стакан белый"
-            description="Стандартный белый"
-            price="255 рублей"
-            priceNote="(Наша цена/шт)"
-            isNew
-            isHot
-          />
-          <ProductCard
-            name="Пленка 15300х200м Паллет (Тульи)"
-            description="Качество гарантировано"
-            price="100 рублей"
-            priceNote="(Наша цена/шт)"
-          />
-          <ProductCard
-            name="Пакет белый"
-            description="Пленка ПНД 1000х600х20"
-            price="2000 рублей"
-            priceNote="(Пачка упаковочная)"
-            isNew
-            isHot
-          />
-          <CatalogCTACard />
-        </div>
-      </section>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {featuredProducts.map((product) => (
+              <Link key={product.id} href={`/products/${product.id}`}>
+                <ProductCard
+                  name={product.name}
+                  description={product.description}
+                  price={`${product.price} руб`}
+                  image={product.images[0]}
+                  sku={product.sku}
+                  unit={product.unit}
+                  wholesalePrice={product.wholesalePrice}
+                  wholesaleAmount={product.wholesaleAmount}
+                  isHot={product.heatProduct}
+                />
+              </Link>
+            ))}
+            <CatalogCTACard />
+          </div>
+        </section>
+      )}
 
       <Space size="2xl" />
 
       {/* Price List Section */}
-      <section id="price-list" className="containerize py-12 md:py-16">
-        <div className="grid items-center gap-12 lg:grid-cols-2">
-          <div>
-            <h2 className="mb-4 text-4xl font-bold tracking-tight md:text-5xl">
-              Прайс-Лист
-            </h2>
-            <p className="mb-8 text-lg text-muted-foreground">
-              Скачайте актуальный прайс-лист со всей продукцией и ценами
-            </p>
-            <Button size="lg" className="w-full sm:w-auto">
-              <Download className="mr-2 h-5 w-5" />
-              Скачать прайс-лист
-            </Button>
-          </div>
+      {priceList && (
+        <section id="price-list" className="containerize py-12 md:py-16">
+          <div className="grid items-center gap-12 lg:grid-cols-2">
+            <div>
+              <h2 className="mb-4 text-4xl font-bold tracking-tight md:text-5xl">
+                Прайс-Лист
+              </h2>
+              <p className="mb-8 text-lg text-muted-foreground">
+                Скачайте актуальный прайс-лист со всей продукцией и ценами
+              </p>
+              <Button size="lg" className="w-full sm:w-auto" asChild>
+                <a href={priceList.path} download={priceList.filename}>
+                  <Download className="mr-2 h-5 w-5" />
+                  Скачать прайс-лист
+                </a>
+              </Button>
+            </div>
 
           <div className="relative flex items-center justify-center">
             <div className="relative aspect-square w-full max-w-md">
@@ -118,7 +122,8 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
+        </section>
+      )}
 
       <Space size="2xl" />
 

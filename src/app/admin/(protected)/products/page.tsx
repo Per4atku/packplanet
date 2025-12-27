@@ -65,20 +65,20 @@ export default async function ProductsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-neutral-900">Products</h1>
+          <h1 className="text-3xl font-bold text-neutral-900">Товары</h1>
           <p className="text-neutral-600 mt-1">
-            Manage your product catalog and inventory
+            Управление каталогом товаров и инвентаризацией
           </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" className="gap-2">
             <Download className="h-4 w-4" />
-            Export
+            Экспорт
           </Button>
           <Link href="/admin/products/new">
             <Button className="gap-2">
               <Plus className="h-4 w-4" />
-              Add Product
+              Добавить товар
             </Button>
           </Link>
         </div>
@@ -87,28 +87,28 @@ export default async function ProductsPage() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatsCard
-          title="Total Products"
+          title="Всего товаров"
           value={totalProducts}
-          description="Active in catalog"
+          description="Активных в каталоге"
           icon={Package}
           trend={{ value: "12%", isPositive: true }}
         />
         <StatsCard
-          title="Hot Products"
+          title="Горячие товары"
           value={hotProducts}
-          description="Featured items"
+          description="Избранные позиции"
           icon={TrendingUp}
         />
         <StatsCard
-          title="Categories"
+          title="Категории"
           value={totalCategories}
-          description="Product groups"
+          description="Групп товаров"
           icon={Layers}
         />
         <StatsCard
-          title="Avg. Price"
+          title="Средняя цена"
           value={`$${avgPrice.toFixed(2)}`}
-          description="Average product price"
+          description="Средняя цена товара"
           icon={Package}
         />
       </div>
@@ -120,13 +120,13 @@ export default async function ProductsPage() {
           <div className="flex items-center justify-between p-6 border-b border-neutral-200">
             <div className="flex gap-2">
               <Button variant="outline" size="sm">
-                All filters
+                Все фильтры
               </Button>
             </div>
             <div className="flex gap-2">
               <Button variant="outline" size="sm" className="gap-2">
                 <Upload className="h-4 w-4" />
-                Import
+                Импорт
               </Button>
             </div>
           </div>
@@ -135,25 +135,25 @@ export default async function ProductsPage() {
             <TableHeader>
               <TableRow className="hover:bg-transparent border-neutral-200">
                 <TableHead className="font-semibold text-neutral-900">
-                  Product
+                  Товар
                 </TableHead>
                 <TableHead className="font-semibold text-neutral-900">
-                  SKU
+                  Артикул
                 </TableHead>
                 <TableHead className="font-semibold text-neutral-900">
-                  Category
+                  Категория
                 </TableHead>
                 <TableHead className="font-semibold text-neutral-900">
-                  Price
+                  Цена
                 </TableHead>
                 <TableHead className="font-semibold text-neutral-900">
-                  Unit
+                  Единица
                 </TableHead>
                 <TableHead className="font-semibold text-neutral-900">
-                  Status
+                  Статус
                 </TableHead>
                 <TableHead className="text-right font-semibold text-neutral-900">
-                  Actions
+                  Действия
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -166,9 +166,9 @@ export default async function ProductsPage() {
                   >
                     <div className="flex flex-col items-center gap-2">
                       <Package className="h-8 w-8 text-neutral-400" />
-                      <p>No products found</p>
+                      <p>Товары не найдены</p>
                       <p className="text-sm">
-                        Create your first product to get started
+                        Создайте свой первый товар, чтобы начать
                       </p>
                     </div>
                   </TableCell>
@@ -190,7 +190,7 @@ export default async function ProductsPage() {
                           </p>
                           {product.images.length > 0 && (
                             <p className="text-xs text-neutral-500">
-                              {product.images.length} images
+                              {product.images.length} изображений
                             </p>
                           )}
                         </div>
@@ -213,11 +213,11 @@ export default async function ProductsPage() {
                     <TableCell>
                       {product.heatProduct ? (
                         <Badge className="bg-red-100 text-red-700 hover:bg-red-100 border-red-200">
-                          Hot
+                          Горячий
                         </Badge>
                       ) : (
                         <Badge variant="outline" className="text-neutral-600">
-                          Active
+                          Активный
                         </Badge>
                       )}
                     </TableCell>
@@ -239,7 +239,7 @@ export default async function ProductsPage() {
                               className="flex items-center gap-2"
                             >
                               <Pencil className="h-4 w-4" />
-                              Edit
+                              Редактировать
                             </Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem asChild>

@@ -51,18 +51,18 @@ export default async function PartnersPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-neutral-900">Partners</h1>
-          <p className="text-neutral-600 mt-1">Manage your business partners</p>
+          <h1 className="text-3xl font-bold text-neutral-900">Партнеры</h1>
+          <p className="text-neutral-600 mt-1">Управление бизнес-партнерами</p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" className="gap-2">
             <Download className="h-4 w-4" />
-            Export
+            Экспорт
           </Button>
           <Link href="/admin/partners/new">
             <Button className="gap-2">
               <Plus className="h-4 w-4" />
-              Add Partner
+              Добавить партнера
             </Button>
           </Link>
         </div>
@@ -71,27 +71,27 @@ export default async function PartnersPage() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatsCard
-          title="Total Partners"
+          title="Всего партнеров"
           value={totalPartners}
-          description="Active partnerships"
+          description="Активных партнерств"
           icon={Handshake}
         />
         <StatsCard
-          title="With Logos"
+          title="С логотипами"
           value={partnersWithLogos}
-          description="Partners with logos"
+          description="Партнеров с логотипами"
           icon={Building2}
         />
         <StatsCard
-          title="With Description"
+          title="С описанием"
           value={partnersWithDescription}
-          description="Complete profiles"
+          description="Полные профили"
           icon={Handshake}
         />
         <StatsCard
-          title="Completion Rate"
+          title="Процент заполнения"
           value={`${totalPartners > 0 ? Math.round((partnersWithDescription / totalPartners) * 100) : 0}%`}
-          description="Profile completeness"
+          description="Заполненность профилей"
           icon={Building2}
         />
       </div>
@@ -103,7 +103,7 @@ export default async function PartnersPage() {
           <div className="flex items-center justify-between p-6 border-b border-neutral-200">
             <div className="flex gap-2">
               <Button variant="outline" size="sm">
-                All filters
+                Все фильтры
               </Button>
             </div>
           </div>
@@ -112,13 +112,13 @@ export default async function PartnersPage() {
             <TableHeader>
               <TableRow className="hover:bg-transparent border-neutral-200">
                 <TableHead className="font-semibold text-neutral-900">
-                  Partner
+                  Партнер
                 </TableHead>
                 <TableHead className="font-semibold text-neutral-900">
-                  Description
+                  Описание
                 </TableHead>
                 <TableHead className="text-right font-semibold text-neutral-900">
-                  Actions
+                  Действия
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -131,9 +131,9 @@ export default async function PartnersPage() {
                   >
                     <div className="flex flex-col items-center gap-2">
                       <Handshake className="h-8 w-8 text-neutral-400" />
-                      <p>No partners found</p>
+                      <p>Партнеры не найдены</p>
                       <p className="text-sm">
-                        Add your first partner to get started
+                        Добавьте своего первого партнера, чтобы начать
                       </p>
                     </div>
                   </TableCell>
@@ -169,7 +169,7 @@ export default async function PartnersPage() {
                       <p className="text-neutral-600 truncate">
                         {partner.description || (
                           <span className="text-neutral-400">
-                            No description
+                            Без описания
                           </span>
                         )}
                       </p>
@@ -192,7 +192,7 @@ export default async function PartnersPage() {
                               className="flex items-center gap-2"
                             >
                               <Pencil className="h-4 w-4" />
-                              Edit
+                              Редактировать
                             </Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem asChild>

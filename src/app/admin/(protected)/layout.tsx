@@ -57,7 +57,7 @@ export default async function AdminLayout({
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-500" />
             <input
               type="text"
-              placeholder="Search"
+              placeholder="Поиск"
               className="w-full rounded-md bg-neutral-900 border border-neutral-800 py-2 pl-9 pr-4 text-sm text-neutral-200 placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-700"
             />
           </div>
@@ -69,45 +69,45 @@ export default async function AdminLayout({
             href="/admin/products"
             icon={<LayoutDashboard className="h-4 w-4" />}
           >
-            Dashboard
+            Панель управления
           </NavLink>
           <NavLink href="/admin/products" icon={<Package className="h-4 w-4" />}>
-            Products
+            Товары
           </NavLink>
           <NavLink
             href="/admin/categories"
             icon={<FolderTree className="h-4 w-4" />}
           >
-            Categories
+            Категории
           </NavLink>
           <NavLink
             href="/admin/partners"
             icon={<Handshake className="h-4 w-4" />}
           >
-            Partners
+            Партнеры
           </NavLink>
           <NavLink
             href="/admin/price-list"
             icon={<FileText className="h-4 w-4" />}
           >
-            Price List
+            Прайс-лист
           </NavLink>
 
           <Separator className="my-4 bg-neutral-800" />
 
           <NavLink href="#" icon={<Bell className="h-4 w-4" />}>
             <div className="flex items-center justify-between flex-1">
-              <span>Notifications</span>
+              <span>Уведомления</span>
               <span className="flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
                 2
               </span>
             </div>
           </NavLink>
           <NavLink href="#" icon={<HelpCircle className="h-4 w-4" />}>
-            Help & support
+            Помощь и поддержка
           </NavLink>
           <NavLink href="#" icon={<Settings className="h-4 w-4" />}>
-            Settings
+            Настройки
           </NavLink>
         </nav>
 
@@ -123,7 +123,7 @@ export default async function AdminLayout({
               <p className="text-sm font-medium text-white truncate">
                 {user.username}
               </p>
-              <p className="text-xs text-neutral-400 truncate">Administrator</p>
+              <p className="text-xs text-neutral-400 truncate">Администратор</p>
             </div>
             <form action={logout}>
               <Button

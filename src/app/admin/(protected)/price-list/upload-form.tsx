@@ -31,7 +31,7 @@ export function UploadForm() {
   return (
     <form action={handleSubmit} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="file">Price List File *</Label>
+        <Label htmlFor="file">Файл прайс-листа *</Label>
         <Input
           id="file"
           name="file"
@@ -46,7 +46,7 @@ export function UploadForm() {
 
       <Button type="submit" disabled={isUploading}>
         <Upload className="mr-2 h-4 w-4" />
-        {isUploading ? "Uploading..." : "Upload Price List"}
+        {isUploading ? "Загрузка..." : "Загрузить прайс-лист"}
       </Button>
     </form>
   );

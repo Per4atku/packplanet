@@ -1,6 +1,18 @@
 import { ProductCard } from "@/components/product-card";
-import { Product } from "@/data/products";
 import Link from "next/link";
+
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  images: string[];
+  sku: string;
+  unit: string;
+  wholesalePrice: number | null;
+  wholesaleAmount: number | null;
+  heatProduct: boolean;
+}
 
 interface ProductsGridProps {
   products: Product[];
@@ -26,9 +38,9 @@ export function ProductsGrid({ products }: ProductsGridProps) {
             image={product.images[0]}
             sku={product.sku}
             unit={product.unit}
-            wholesalePrice={product.wholesale_price}
-            wholesaleAmount={product.wholesale_amount}
-            isHot={product.heat_product}
+            wholesalePrice={product.wholesalePrice}
+            wholesaleAmount={product.wholesaleAmount}
+            isHot={product.heatProduct}
           />
         </Link>
       ))}

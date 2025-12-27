@@ -15,15 +15,15 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-neutral-50">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Admin Login</CardTitle>
+          <CardTitle>Вход в админ-панель</CardTitle>
           <CardDescription>
-            Sign in to access the admin dashboard
+            Войдите, чтобы получить доступ к панели управления
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form action={login} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="username">Username</Label>
+              <Label htmlFor="username">Имя пользователя</Label>
               <Input
                 id="username"
                 name="username"
@@ -33,7 +33,7 @@ export default function LoginPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">Пароль</Label>
               <Input
                 id="password"
                 name="password"
@@ -43,7 +43,7 @@ export default function LoginPage() {
               />
             </div>
             <Button type="submit" className="w-full">
-              Sign In
+              Войти
             </Button>
           </form>
         </CardContent>

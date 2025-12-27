@@ -38,9 +38,9 @@ export default async function PriceListPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-neutral-900">Price List</h1>
+        <h1 className="text-3xl font-bold text-neutral-900">Прайс-лист</h1>
         <p className="text-neutral-600 mt-1">
-          Manage your downloadable price list file
+          Управление файлом прайс-листа для скачивания
         </p>
       </div>
 
@@ -49,23 +49,23 @@ export default async function PriceListPage() {
           {/* Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <StatsCard
-              title="Current File"
+              title="Текущий файл"
               value={currentPriceList.filename.substring(0, 20) + "..."}
-              description="Active price list"
+              description="Активный прайс-лист"
               icon={FileText}
             />
             <StatsCard
-              title="Last Updated"
-              value={`${daysSinceUpload}d ago`}
+              title="Последнее обновление"
+              value={`${daysSinceUpload} дн. назад`}
               description={new Date(
                 currentPriceList.uploadedAt
-              ).toLocaleDateString()}
+              ).toLocaleDateString('ru-RU')}
               icon={Clock}
             />
             <StatsCard
-              title="Status"
-              value="Active"
-              description="Available for download"
+              title="Статус"
+              value="Активный"
+              description="Доступен для скачивания"
               icon={Download}
             />
           </div>
@@ -79,10 +79,10 @@ export default async function PriceListPage() {
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center gap-2 text-xl">
                 <FileText className="h-5 w-5 text-neutral-700" />
-                Current Price List
+                Текущий прайс-лист
               </CardTitle>
               <Badge variant="secondary" className="font-normal">
-                Active
+                Активный
               </Badge>
             </div>
           </CardHeader>
@@ -91,7 +91,7 @@ export default async function PriceListPage() {
               <div className="space-y-4 flex-1">
                 <div>
                   <p className="text-sm font-medium text-neutral-500 mb-1">
-                    Filename
+                    Имя файла
                   </p>
                   <p className="font-medium text-neutral-900">
                     {currentPriceList.filename}
@@ -100,9 +100,9 @@ export default async function PriceListPage() {
                 <div className="flex items-center gap-2 text-sm text-neutral-600">
                   <Calendar className="h-4 w-4" />
                   <span>
-                    Uploaded on{" "}
+                    Загружено{" "}
                     {new Date(currentPriceList.uploadedAt).toLocaleDateString(
-                      "en-US",
+                      "ru-RU",
                       {
                         year: "numeric",
                         month: "long",
@@ -118,7 +118,7 @@ export default async function PriceListPage() {
                 <a href={currentPriceList.path} download>
                   <Button variant="outline" size="sm" className="gap-2">
                     <Download className="h-4 w-4" />
-                    Download
+                    Скачать
                   </Button>
                 </a>
                 <DeleteButton priceListId={currentPriceList.id} />
@@ -133,7 +133,7 @@ export default async function PriceListPage() {
         <CardHeader className="border-b border-neutral-200">
           <CardTitle className="flex items-center gap-2 text-xl">
             <Upload className="h-5 w-5 text-neutral-700" />
-            {currentPriceList ? "Upload New Price List" : "Upload Price List"}
+            {currentPriceList ? "Загрузить новый прайс-лист" : "Загрузить прайс-лист"}
           </CardTitle>
         </CardHeader>
         <CardContent className="pt-6">
@@ -142,15 +142,15 @@ export default async function PriceListPage() {
             <p className="text-sm text-neutral-600">
               {currentPriceList ? (
                 <>
-                  <span className="font-medium">Note:</span> Uploading a new
-                  file will replace the existing price list. The old file will
-                  be permanently deleted.
+                  <span className="font-medium">Примечание:</span> Загрузка нового
+                  файла заменит существующий прайс-лист. Старый файл будет
+                  безвозвратно удален.
                 </>
               ) : (
                 <>
-                  <span className="font-medium">Upload your first</span> price
-                  list file. Supported formats: PDF, Excel, Word, and other
-                  documents.
+                  <span className="font-medium">Загрузите ваш первый</span> файл
+                  прайс-листа. Поддерживаемые форматы: PDF, Excel, Word и другие
+                  документы.
                 </>
               )}
             </p>
@@ -171,7 +171,7 @@ function DeleteButton({ priceListId }: { priceListId: string }) {
     <form action={handleDelete}>
       <Button variant="destructive" size="sm" type="submit" className="gap-2">
         <Trash2 className="h-4 w-4" />
-        Delete
+        Удалить
       </Button>
     </form>
   );

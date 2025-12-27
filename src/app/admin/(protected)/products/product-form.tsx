@@ -45,7 +45,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
   };
 
   const handleRemoveImage = async (imagePath: string) => {
-    if (product && confirm("Are you sure you want to remove this image?")) {
+    if (product && confirm("Вы уверены, что хотите удалить это изображение?")) {
       await removeProductImage(product.id, imagePath);
       router.refresh();
     }
@@ -57,7 +57,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
         <form action={handleSubmit} className="space-y-6">
           <div className="grid gap-6 md:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="sku">SKU *</Label>
+              <Label htmlFor="sku">Артикул *</Label>
               <Input
                 id="sku"
                 name="sku"
@@ -67,7 +67,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="name">Name *</Label>
+              <Label htmlFor="name">Название *</Label>
               <Input
                 id="name"
                 name="name"
@@ -78,7 +78,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description">Описание</Label>
             <Textarea
               id="description"
               name="description"
@@ -89,7 +89,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
 
           <div className="grid gap-6 md:grid-cols-3">
             <div className="space-y-2">
-              <Label htmlFor="price">Price *</Label>
+              <Label htmlFor="price">Цена *</Label>
               <Input
                 id="price"
                 name="price"
@@ -101,21 +101,21 @@ export function ProductForm({ product, categories }: ProductFormProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="unit">Unit *</Label>
+              <Label htmlFor="unit">Единица измерения *</Label>
               <Input
                 id="unit"
                 name="unit"
                 required
                 defaultValue={product?.unit}
-                placeholder="e.g., pc, kg, box"
+                placeholder="напр., шт, кг, упак"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="categoryId">Category *</Label>
+              <Label htmlFor="categoryId">Категория *</Label>
               <Select value={categoryId} onValueChange={setCategoryId}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select category" />
+                  <SelectValue placeholder="Выберите категорию" />
                 </SelectTrigger>
                 <SelectContent>
                   {categories.map((category) => (
@@ -130,7 +130,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
 
           <div className="grid gap-6 md:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="wholesalePrice">Wholesale Price</Label>
+              <Label htmlFor="wholesalePrice">Оптовая цена</Label>
               <Input
                 id="wholesalePrice"
                 name="wholesalePrice"
@@ -141,7 +141,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="wholesaleAmount">Wholesale Amount</Label>
+              <Label htmlFor="wholesaleAmount">Минимальное количество для опта</Label>
               <Input
                 id="wholesaleAmount"
                 name="wholesaleAmount"
@@ -161,20 +161,20 @@ export function ProductForm({ product, categories }: ProductFormProps) {
                 className="h-4 w-4"
               />
               <Label htmlFor="heatProduct" className="cursor-pointer">
-                Mark as Hot Product
+                Отметить как горячий товар
               </Label>
             </div>
           </div>
 
           {product && product.images.length > 0 && (
             <div className="space-y-2">
-              <Label>Current Images</Label>
+              <Label>Текущие изображения</Label>
               <div className="grid grid-cols-4 gap-4">
                 {product.images.map((imagePath) => (
                   <div key={imagePath} className="relative aspect-square">
                     <Image
                       src={imagePath}
-                      alt="Product"
+                      alt="Товар"
                       fill
                       className="rounded-lg object-cover"
                     />
@@ -193,7 +193,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
 
           <div className="space-y-2">
             <Label htmlFor="images">
-              {product ? "Add More Images" : "Images"}
+              {product ? "Добавить еще изображения" : "Изображения"}
             </Label>
             <Input
               id="images"
@@ -203,13 +203,13 @@ export function ProductForm({ product, categories }: ProductFormProps) {
               multiple
             />
             <p className="text-sm text-neutral-500">
-              Upload product images (multiple files allowed)
+              Загрузите изображения товара (можно несколько файлов)
             </p>
           </div>
 
           <div className="flex gap-3">
             <Button type="submit">
-              {product ? "Update Product" : "Create Product"}
+              {product ? "Обновить товар" : "Создать товар"}
             </Button>
             <Button
               type="button"
@@ -217,7 +217,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
               onClick={() => router.back()}
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Cancel
+              Отмена
             </Button>
           </div>
         </form>
