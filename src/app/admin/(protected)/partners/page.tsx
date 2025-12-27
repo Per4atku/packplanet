@@ -39,10 +39,6 @@ export default async function PartnersPage() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" className="gap-2">
-            <Download className="h-4 w-4" />
-            {content.actions.export}
-          </Button>
           <Link href="/admin/partners/new">
             <Button className="gap-2">
               <Plus className="h-4 w-4" />
@@ -50,38 +46,6 @@ export default async function PartnersPage() {
             </Button>
           </Link>
         </div>
-      </div>
-
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <StatsCard
-          title={content.partners.stats.totalPartners}
-          value={totalPartners}
-          description={content.partners.stats.totalPartnersDesc}
-          icon={Handshake}
-        />
-        <StatsCard
-          title={content.partners.stats.withLogos}
-          value={partnersWithLogos}
-          description={content.partners.stats.withLogosDesc}
-          icon={Building2}
-        />
-        <StatsCard
-          title={content.partners.stats.withDescription}
-          value={partnersWithDescription}
-          description={content.partners.stats.withDescriptionDesc}
-          icon={Handshake}
-        />
-        <StatsCard
-          title={content.partners.stats.completionRate}
-          value={`${
-            totalPartners > 0
-              ? Math.round((partnersWithDescription / totalPartners) * 100)
-              : 0
-          }%`}
-          description={content.partners.stats.completionRateDesc}
-          icon={Building2}
-        />
       </div>
 
       {/* Partners Table */}

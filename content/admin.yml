@@ -67,14 +67,14 @@ products:
 
   status:
     hot: "Популярный"
-    active: "Активный"
+    active: "Обычный"
 
   images: "изображений"
 
 # Categories Page
 categories:
   title: "Категории"
-  description: "Управление категориями товаров и организацией"
+  description: "Управление категориями товаров"
   addButton: "Добавить категорию"
 
   stats:
@@ -100,7 +100,7 @@ categories:
 # Partners Page
 partners:
   title: "Партнеры"
-  description: "Управление бизнес-партнерами"
+  description: "Управление партнерами"
   addButton: "Добавить партнера"
 
   stats:
@@ -172,6 +172,11 @@ productForm:
     wholesalePrice: "Оптовая цена"
     wholesaleAmount: "Минимальное количество для опта"
     heatProduct: "Отметить как хит-товар"
+    linkedProducts: "Связанные товары"
+    linkedProductsHelp: "Выберите товары, связанные с этим товаром"
+    linkedProductsPlaceholder: "Поиск товаров..."
+    linkedProductsEmpty: "Товары не найдены"
+    linkedProductsSelected: "выбрано"
     currentImages: "Текущие изображения"
     addMoreImages: "Добавить еще изображения"
     images: "Изображения"

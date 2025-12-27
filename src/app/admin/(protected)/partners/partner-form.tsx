@@ -5,10 +5,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
+import { FileUpload } from "@/components/ui/file-upload";
 import { createPartner, updatePartner } from "./actions";
 import { Partner } from "@/generated/prisma/client";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, X } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import Image from "next/image";
 import type { AdminContent } from "@/lib/content";
 
@@ -19,8 +21,19 @@ interface PartnerFormProps {
 
 export function PartnerForm({ partner, content }: PartnerFormProps) {
   const router = useRouter();
+  const [selectedImage, setSelectedImage] = useState<File[]>([]);
 
-  const handleSubmit = async (formData: FormData) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+
+    // Clear existing image field and add selected image
+    formData.delete("image");
+    if (selectedImage.length > 0) {
+      formData.append("image", selectedImage[0]);
+    }
+
     if (partner) {
       await updatePartner(partner.id, formData);
     } else {
@@ -31,7 +44,7 @@ export function PartnerForm({ partner, content }: PartnerFormProps) {
   return (
     <Card>
       <CardContent className="pt-6">
-        <form action={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
             <Label htmlFor="name">{content.partnerForm.fields.name} *</Label>
             <Input
@@ -59,27 +72,33 @@ export function PartnerForm({ partner, content }: PartnerFormProps) {
           {partner?.image && (
             <div className="space-y-2">
               <Label>{content.partnerForm.fields.currentLogo}</Label>
-              <div className="relative h-32 w-32">
+              <div className="relative h-32 w-32 rounded-lg border border-neutral-200 bg-neutral-50 p-2">
                 <Image
                   src={partner.image}
                   alt={partner.name}
                   fill
-                  className="rounded-lg object-contain"
+                  className="rounded object-contain p-2"
                 />
               </div>
             </div>
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="image">
+            <Label>
               {partner
                 ? content.partnerForm.fields.replaceLogo
                 : content.partnerForm.fields.logo}
             </Label>
-            <Input id="image" name="image" type="file" accept="image/*" />
-            <p className="text-sm text-neutral-500">
-              {content.partnerForm.fields.logoHelp}
-            </p>
+            <FileUpload
+              onFilesChange={setSelectedImage}
+              accept="image/*"
+              multiple={false}
+              disabled={false}
+              maxSize={5 * 1024 * 1024}
+              label={partner ? "Заменить логотип" : "Загрузить логотип партнера"}
+              description={content.partnerForm.fields.logoHelp}
+              preview="image"
+            />
           </div>
 
           <div className="flex gap-3">

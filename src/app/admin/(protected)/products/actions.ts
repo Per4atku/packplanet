@@ -25,6 +25,8 @@ export async function createProduct(formData: FormData) {
   const wholesalePrice = formData.get("wholesalePrice") as string;
   const wholesaleAmount = formData.get("wholesaleAmount") as string;
   const heatProduct = formData.get("heatProduct") === "true";
+  const linkedProductIdsJson = formData.get("linkedProductIds") as string;
+  const linkedProductIds = linkedProductIdsJson ? JSON.parse(linkedProductIdsJson) : [];
 
   // Handle image upload
   const images: string[] = [];
@@ -58,6 +60,7 @@ export async function createProduct(formData: FormData) {
       wholesalePrice: wholesalePrice ? parseFloat(wholesalePrice) : null,
       wholesaleAmount: wholesaleAmount ? parseInt(wholesaleAmount) : null,
       heatProduct,
+      linkedProductIds,
     },
   });
 
@@ -75,6 +78,8 @@ export async function updateProduct(id: string, formData: FormData) {
   const wholesalePrice = formData.get("wholesalePrice") as string;
   const wholesaleAmount = formData.get("wholesaleAmount") as string;
   const heatProduct = formData.get("heatProduct") === "true";
+  const linkedProductIdsJson = formData.get("linkedProductIds") as string;
+  const linkedProductIds = linkedProductIdsJson ? JSON.parse(linkedProductIdsJson) : [];
 
   // Get existing product
   const existingProduct = await prisma.product.findUnique({
@@ -115,6 +120,7 @@ export async function updateProduct(id: string, formData: FormData) {
       wholesalePrice: wholesalePrice ? parseFloat(wholesalePrice) : null,
       wholesaleAmount: wholesaleAmount ? parseInt(wholesaleAmount) : null,
       heatProduct,
+      linkedProductIds,
     },
   });
 

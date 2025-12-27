@@ -105,7 +105,7 @@ export function ProductsTable({ products, content }: ProductsTableProps) {
       header: content.products.table.price,
       cell: ({ row }) => (
         <span className="font-semibold text-neutral-900">
-          ${Number(row.original.price).toFixed(2)}
+          ₽{Number(row.original.price).toFixed(2)}
         </span>
       ),
     },
@@ -121,7 +121,7 @@ export function ProductsTable({ products, content }: ProductsTableProps) {
       header: content.products.table.status,
       cell: ({ row }) => {
         return row.original.heatProduct ? (
-          <Badge className="border-red-200 bg-red-100 text-red-700 hover:bg-red-100">
+          <Badge className="border-amber-600 bg-amber-500 text-amber-900 hover:bg-red-100">
             {content.products.status.hot}
           </Badge>
         ) : (
@@ -171,7 +171,7 @@ export function ProductsTable({ products, content }: ProductsTableProps) {
       columns={columns}
       data={products}
       searchKey="name"
-      searchPlaceholder="Search products..."
+      searchPlaceholder="Искать товары..."
       getRowId={(row) => row.id}
       enableDragDrop={false}
       onRowClick={handleRowClick}

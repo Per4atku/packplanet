@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import { FileUpload } from "@/components/ui/file-upload";
+import { ProductMultiSelect } from "@/components/ui/product-multi-select";
 import { createProduct, updateProduct, removeProductImage } from "./actions";
 import { Category, Product } from "@/generated/prisma/client";
 import { ArrowLeft, X } from "lucide-react";
@@ -36,6 +37,9 @@ export function ProductForm({ product, categories, content }: ProductFormProps) 
     product?.heatProduct || false
   );
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
+  const [linkedProductIds, setLinkedProductIds] = useState<string[]>(
+    product?.linkedProductIds || []
+  );
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -43,6 +47,7 @@ export function ProductForm({ product, categories, content }: ProductFormProps) 
     const formData = new FormData(e.currentTarget);
     formData.set("categoryId", categoryId);
     formData.set("heatProduct", heatProduct.toString());
+    formData.set("linkedProductIds", JSON.stringify(linkedProductIds));
 
     // Clear existing images field and add selected images
     formData.delete("images");
@@ -177,6 +182,23 @@ export function ProductForm({ product, categories, content }: ProductFormProps) 
                 {content.productForm.fields.heatProduct}
               </Label>
             </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="linkedProducts">
+              {content.productForm.fields.linkedProducts}
+            </Label>
+            <p className="text-sm text-neutral-500">
+              {content.productForm.fields.linkedProductsHelp}
+            </p>
+            <ProductMultiSelect
+              selectedIds={linkedProductIds}
+              onSelectionChange={setLinkedProductIds}
+              excludeId={product?.id}
+              placeholder={content.productForm.fields.linkedProductsPlaceholder}
+              emptyText={content.productForm.fields.linkedProductsEmpty}
+              selectedText={content.productForm.fields.linkedProductsSelected}
+            />
           </div>
 
           {product && product.images.length > 0 && (

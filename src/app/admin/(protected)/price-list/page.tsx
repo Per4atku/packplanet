@@ -53,48 +53,6 @@ export default async function PriceListPage() {
         <p className="mt-1 text-neutral-600">{content.priceList.description}</p>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <StatsCard
-          title={content.priceList.currentSection.statusLabel || "Status"}
-          value={currentPriceList ? "Active" : "No File"}
-          description={
-            currentPriceList
-              ? "Price list is available"
-              : "No price list uploaded"
-          }
-          icon={currentPriceList ? CheckCircle2 : AlertCircle}
-        />
-        <StatsCard
-          title="Days Since Upload"
-          value={currentPriceList ? daysSinceUpload : "-"}
-          description={
-            currentPriceList
-              ? isRecent
-                ? "Recently updated"
-                : "Consider updating"
-              : "Upload your first price list"
-          }
-          icon={Clock}
-        />
-        <StatsCard
-          title="Current File"
-          value={currentPriceList ? "1" : "0"}
-          description="Active price list file"
-          icon={FileText}
-        />
-        <StatsCard
-          title="Last Updated"
-          value={
-            currentPriceList
-              ? new Date(currentPriceList.uploadedAt).toLocaleDateString()
-              : "-"
-          }
-          description="Most recent upload date"
-          icon={Calendar}
-        />
-      </div>
-
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Current Price List */}
         <Card className="border-neutral-200 bg-white shadow-sm">
@@ -132,7 +90,7 @@ export default async function PriceListPage() {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <p className="mb-1 text-xs font-medium uppercase tracking-wide text-neutral-500">
-                        Uploaded
+                        Загружен
                       </p>
                       <div className="flex items-center gap-2 text-sm text-neutral-900">
                         <Calendar className="h-4 w-4 text-neutral-500" />
@@ -219,7 +177,9 @@ export default async function PriceListPage() {
             </div>
             <div className="flex-1">
               <h3 className="font-semibold text-neutral-900">
-                {currentPriceList ? "Update Information" : "Getting Started"}
+                {currentPriceList
+                  ? "Информация по обновлению"
+                  : "Давайте начнем"}
               </h3>
               <p className="mt-1 text-sm text-neutral-600">
                 {currentPriceList ? (

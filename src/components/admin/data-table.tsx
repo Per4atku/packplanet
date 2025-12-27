@@ -269,7 +269,7 @@ export function AdminDataTable<TData, TValue>({
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="sm" className="gap-2">
                 <LayoutGrid className="h-4 w-4" />
-                Columns
+                Колонки
                 <ChevronDown className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>

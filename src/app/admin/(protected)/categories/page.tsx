@@ -52,10 +52,6 @@ export default async function CategoriesPage() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" className="gap-2">
-            <Download className="h-4 w-4" />
-            {content.actions.export}
-          </Button>
           <Link href="/admin/categories/new">
             <Button className="gap-2">
               <Plus className="h-4 w-4" />
@@ -63,34 +59,6 @@ export default async function CategoriesPage() {
             </Button>
           </Link>
         </div>
-      </div>
-
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <StatsCard
-          title="Total Categories"
-          value={totalCategories}
-          description="Active product categories"
-          icon={FolderTree}
-        />
-        <StatsCard
-          title="Total Products"
-          value={totalProducts}
-          description="Products across all categories"
-          icon={Package}
-        />
-        <StatsCard
-          title="Avg Products/Category"
-          value={avgProductsPerCategory.toFixed(1)}
-          description="Average products per category"
-          icon={Layers}
-        />
-        <StatsCard
-          title="Largest Category"
-          value={largestCategory}
-          description="Products in largest category"
-          icon={FolderTree}
-        />
       </div>
 
       {/* Categories Table */}

@@ -40,42 +40,17 @@ export default async function AdminLayout({
         {/* Brand */}
         <div className="flex h-16 items-center justify-between px-4 border-b border-neutral-800">
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-md bg-gradient-to-br from-neutral-700 to-neutral-900 flex items-center justify-center">
+            <div className="h-8 w-8 rounded-md bg-linear-to-br from-neutral-700 to-neutral-900 flex items-center justify-center">
               <Package className="h-5 w-5 text-white" />
             </div>
             <span className="font-semibold text-white">
               {content.site.name}
             </span>
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 text-neutral-400 hover:text-white hover:bg-neutral-800"
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-        </div>
-
-        {/* Search */}
-        <div className="px-3 pt-4 pb-2">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-500" />
-            <input
-              type="text"
-              placeholder={content.navigation.search}
-              className="w-full rounded-md bg-neutral-900 border border-neutral-800 py-2 pl-9 pr-4 text-sm text-neutral-200 placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-700"
-            />
-          </div>
         </div>
 
         {/* Navigation */}
         <nav className="flex-1 space-y-1 px-3 py-2">
-          <NavLink
-            href="/admin/products"
-            icon={<LayoutDashboard className="h-4 w-4" />}
-          >
-            {content.navigation.dashboard}
-          </NavLink>
           <NavLink
             href="/admin/products"
             icon={<Package className="h-4 w-4" />}

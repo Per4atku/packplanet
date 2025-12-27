@@ -3,13 +3,7 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { Button } from "@/components/ui/button";
 import { StatsCard } from "@/components/admin/stats-card";
 import { ProductsTable } from "./products-table";
-import {
-  Plus,
-  Package,
-  TrendingUp,
-  Layers,
-  Download,
-} from "lucide-react";
+import { Plus, Package, TrendingUp, Layers, Download } from "lucide-react";
 import Link from "next/link";
 import { getAdminContent } from "@/lib/content";
 
@@ -55,47 +49,12 @@ export default async function ProductsPage() {
             {content.products.description}
           </p>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" className="gap-2">
-            <Download className="h-4 w-4" />
-            {content.actions.export}
+        <Link href="/admin/products/new">
+          <Button className="gap-2">
+            <Plus className="h-4 w-4" />
+            {content.products.addButton}
           </Button>
-          <Link href="/admin/products/new">
-            <Button className="gap-2">
-              <Plus className="h-4 w-4" />
-              {content.products.addButton}
-            </Button>
-          </Link>
-        </div>
-      </div>
-
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <StatsCard
-          title={content.products.stats.totalProducts}
-          value={totalProducts}
-          description={content.products.stats.totalProductsDesc}
-          icon={Package}
-          trend={{ value: "12%", isPositive: true }}
-        />
-        <StatsCard
-          title={content.products.stats.hotProducts}
-          value={hotProducts}
-          description={content.products.stats.hotProductsDesc}
-          icon={TrendingUp}
-        />
-        <StatsCard
-          title={content.products.stats.categories}
-          value={totalCategories}
-          description={content.products.stats.categoriesDesc}
-          icon={Layers}
-        />
-        <StatsCard
-          title={content.products.stats.avgPrice}
-          value={`$${avgPrice.toFixed(2)}`}
-          description={content.products.stats.avgPriceDesc}
-          icon={Package}
-        />
+        </Link>
       </div>
 
       {/* Products Table */}
