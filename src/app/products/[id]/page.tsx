@@ -50,7 +50,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <section className="containerize py-12 md:py-16">
         {/* Back to Catalog Link */}
         <div className="mb-8">
-          <Button variant="ghost" asChild>
+          <Button variant="outline" asChild>
             <Link href="/products" className="gap-2">
               <ArrowLeft className="h-4 w-4" />
               Назад к каталогу
@@ -62,7 +62,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
         <div className="grid gap-8 lg:grid-cols-2">
           {/* Left Column: Image Carousel */}
           <div>
-            <ProductCarousel images={product.images} productName={product.name} />
+            <ProductCarousel
+              images={product.images}
+              productName={product.name}
+            />
           </div>
 
           {/* Right Column: Product Information */}
@@ -89,7 +92,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <p className="text-sm text-muted-foreground">Розничная цена</p>
+                  <p className="text-sm text-muted-foreground">
+                    Розничная цена
+                  </p>
                   <p className="text-3xl font-bold text-primary">
                     {product.price} руб
                     <span className="text-lg text-muted-foreground">
@@ -100,9 +105,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
                 {product.wholesale_price && product.wholesale_amount && (
                   <div className="rounded-lg bg-muted p-4">
-                    <p className="mb-1 text-sm font-semibold">
-                      Оптовая цена
-                    </p>
+                    <p className="mb-1 text-sm font-semibold">Оптовая цена</p>
                     <p className="text-xl font-bold">
                       {product.wholesale_price} руб
                       <span className="text-sm text-muted-foreground">
@@ -132,7 +135,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   <span className="font-semibold">{product.category}</span>
                 </div>
                 <div className="flex justify-between border-b pb-2">
-                  <span className="text-muted-foreground">Единица измерения</span>
+                  <span className="text-muted-foreground">
+                    Единица измерения
+                  </span>
                   <span className="font-semibold">{product.unit}</span>
                 </div>
               </CardContent>
@@ -142,18 +147,25 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <Card className="bg-primary/5">
               <CardContent className="pt-6">
                 <p className="mb-4 text-sm text-muted-foreground">
-                  Для оформления заказа свяжитесь с нами по телефону или электронной почте
+                  Для оформления заказа свяжитесь с нами по телефону или
+                  электронной почте
                 </p>
                 <div className="space-y-2 text-sm">
                   <p>
                     <span className="font-semibold">Телефон:</span>{" "}
-                    <a href="tel:+78002347876" className="text-primary hover:underline">
+                    <a
+                      href="tel:+78002347876"
+                      className="text-primary hover:underline"
+                    >
                       8 (800) 234-78-76
                     </a>
                   </p>
                   <p>
                     <span className="font-semibold">Email:</span>{" "}
-                    <a href="mailto:sinfo@wsk.ru" className="text-primary hover:underline">
+                    <a
+                      href="mailto:sinfo@wsk.ru"
+                      className="text-primary hover:underline"
+                    >
                       sinfo@wsk.ru
                     </a>
                   </p>
@@ -169,7 +181,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <SectionHeading>Похожие товары</SectionHeading>
             <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {relatedProducts.map((relatedProduct) => (
-                <Link key={relatedProduct.id} href={`/products/${relatedProduct.id}`}>
+                <Link
+                  key={relatedProduct.id}
+                  href={`/products/${relatedProduct.id}`}
+                >
                   <ProductCard
                     name={relatedProduct.name}
                     description={relatedProduct.description}

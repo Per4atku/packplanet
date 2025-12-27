@@ -22,19 +22,19 @@ export function Header() {
             Каталог
           </Link>
           <Link
-            href="#price-list"
+            href="/#price-list"
             className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
             Прайс-Лист
           </Link>
           <Link
-            href="#delivery"
+            href="/#delivery"
             className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
             Условия Доставки
           </Link>
           <Link
-            href="#contacts"
+            href="/#contacts"
             className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
             Контакты

@@ -12,3 +12,51 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model Category {
+  id       String    @id @default(cuid())
+  name     String    @unique
+  products Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id               String   @id @default(cuid())
+  sku              String   @unique
+  name             String
+  price            Float
+  unit             String
+  categoryId       String
+  category         Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  description      String   @default("")
+  images           String[] @default([])
+  wholesalePrice   Float?
+  wholesaleAmount  Int?
+  heatProduct      Boolean  @default(false)
+  linkedProductIds String[] @default([])
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([sku])
+  @@map("products")
+}
+
+model Partner {
+  id          String @id @default(cuid())
+  name        String
+  description String @default("")
+  image       String @default("")
+
+  @@map("partners")
+}
+
+model PriceList {
+  id         String   @id @default(cuid())
+  filename   String
+  path       String
+  uploadedAt DateTime @default(now())
+
+  @@map("price_lists")
+}

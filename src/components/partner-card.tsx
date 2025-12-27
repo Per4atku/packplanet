@@ -15,7 +15,7 @@ export function PartnerCard({ name, description, image }: PartnerCardProps) {
           src={image}
           alt={name}
           fill
-          className="object-cover transition-transform duration-300 group-hover:scale-110"
+          className="object-cover p-2 rounded-xl transition-transform duration-300 group-hover:scale-105"
         />
       </div>
       <CardContent className="p-5">
