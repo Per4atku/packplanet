@@ -12,6 +12,10 @@ interface ProductCardProps {
   isNew?: boolean;
   isHot?: boolean;
   imageSize?: string;
+  sku?: string;
+  unit?: string;
+  wholesalePrice?: number;
+  wholesaleAmount?: number;
 }
 
 export function ProductCard({
@@ -23,6 +27,10 @@ export function ProductCard({
   isNew = false,
   isHot = false,
   imageSize = "h-32",
+  sku,
+  unit,
+  wholesalePrice,
+  wholesaleAmount,
 }: ProductCardProps) {
   return (
     <Card className="group relative overflow-hidden transition-all hover:shadow-lg">
@@ -48,6 +56,12 @@ export function ProductCard({
           )}
         </div>
 
+        {sku && (
+          <Badge variant="outline" className="mb-2 text-xs text-muted-foreground">
+            Арт: {sku}
+          </Badge>
+        )}
+
         {isNew && (
           <Badge variant="default" className="mb-3 bg-primary">
             Новая упаковка
@@ -61,9 +75,17 @@ export function ProductCard({
         )}
 
         <div className="text-center">
-          <p className="text-2xl font-bold text-foreground">{price}</p>
+          <p className="text-2xl font-bold text-foreground">
+            {price}
+            {unit && <span className="text-sm text-muted-foreground">/{unit}</span>}
+          </p>
           {priceNote && (
             <p className="text-xs text-muted-foreground">{priceNote}</p>
+          )}
+          {wholesalePrice && wholesaleAmount && (
+            <p className="mt-2 text-xs text-muted-foreground">
+              Опт: {wholesaleAmount}+ шт - {wholesalePrice} руб
+            </p>
           )}
         </div>
       </CardContent>

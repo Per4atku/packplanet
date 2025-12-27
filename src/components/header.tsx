@@ -16,7 +16,7 @@ export function Header() {
 
         <nav className="hidden items-center gap-6 md:flex">
           <Link
-            href="/catalog"
+            href="/products"
             className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
             Каталог
