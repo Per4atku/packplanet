@@ -10,9 +10,9 @@ The project itself is a minimalistic, modern landing page for packaging company 
 
 ## Features
 
-- Admin panel with authentication of an admin, modern minimalistic beautiful dashboard for managing products, it's categories, uploaded price-lists files
-- Download relevant price-list for users on the home-page
-- Catalog of the products with search, filters, categories on /catalog
+- [] Admin panel with authentication of an admin user, modern minimalistic beautiful dashboard for managing products, it's categories, uploading price-lits files, updating price-lists
+- [] Ability for a user to download relevant price-list on the home-page
+- [] Catalog of the products with search, filters, categories on /catalog
 
 ## Commands
 
