@@ -7,6 +7,7 @@ import { ProductsGrid } from "@/components/products-grid";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useTransition } from "react";
+import type { CatalogContent } from "@/lib/content";
 
 interface Product {
   id: string;
@@ -36,6 +37,7 @@ interface CatalogPageClientProps {
   totalPages: number;
   currentPage: number;
   totalCount: number;
+  content: CatalogContent;
 }
 
 export function CatalogPageClient({
@@ -44,6 +46,7 @@ export function CatalogPageClient({
   totalPages,
   currentPage,
   totalCount,
+  content,
 }: CatalogPageClientProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -57,7 +60,7 @@ export function CatalogPageClient({
 
   // Create category options with IDs as values
   const categoryOptions = [
-    { id: "all", name: "Все категории" },
+    { id: "all", name: content.filters.allCategories },
     ...categories,
   ];
 
@@ -111,8 +114,8 @@ export function CatalogPageClient({
 
       {/* Results Count */}
       <div className="text-sm text-muted-foreground">
-        Найдено товаров: <span className="font-semibold">{totalCount}</span>
-        {isPending && <span className="ml-2 text-xs">(обновление...)</span>}
+        {content.results.found} <span className="font-semibold">{totalCount}</span>
+        {isPending && <span className="ml-2 text-xs">{content.results.updating}</span>}
       </div>
 
       {/* Products Grid */}
@@ -130,7 +133,7 @@ export function CatalogPageClient({
             disabled={currentPage === 1}
           >
             <ChevronLeft className="h-4 w-4" />
-            Назад
+            {content.pagination.previous}
           </Button>
 
           <div className="flex items-center gap-2">
@@ -146,7 +149,7 @@ export function CatalogPageClient({
                 if (page === currentPage - 2 || page === currentPage + 2) {
                   return (
                     <span key={page} className="px-2 text-muted-foreground">
-                      ...
+                      {content.pagination.ellipsis}
                     </span>
                   );
                 }
@@ -173,7 +176,7 @@ export function CatalogPageClient({
             onClick={() => goToPage(currentPage + 1)}
             disabled={currentPage === totalPages}
           >
-            Вперед
+            {content.pagination.next}
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>

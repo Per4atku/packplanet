@@ -45,7 +45,7 @@ products:
   stats:
     totalProducts: "Всего товаров"
     totalProductsDesc: "Активных в каталоге"
-    hotProducts: "Горячие товары"
+    hotProducts: "Хит-товары"
     hotProductsDesc: "Избранные позиции"
     categories: "Категории"
     categoriesDesc: "Групп товаров"
@@ -66,7 +66,7 @@ products:
     description: "Создайте свой первый товар, чтобы начать"
 
   status:
-    hot: "Горячий"
+    hot: "Популярный"
     active: "Активный"
 
   images: "изображений"
@@ -171,7 +171,7 @@ productForm:
     categoryPlaceholder: "Выберите категорию"
     wholesalePrice: "Оптовая цена"
     wholesaleAmount: "Минимальное количество для опта"
-    heatProduct: "Отметить как горячий товар"
+    heatProduct: "Отметить как хит-товар"
     currentImages: "Текущие изображения"
     addMoreImages: "Добавить еще изображения"
     images: "Изображения"
@@ -232,4 +232,4 @@ partnerForm:
 uploadForm:
   fileLabel: "Файл прайс-листа"
   uploadingButton: "Загрузка..."
-  uploadButton: "Загрузить прайс-лист"
+  uploadButton: "Опубликовать прайс-лист"

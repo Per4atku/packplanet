@@ -18,6 +18,7 @@ import {
   HelpCircle,
   Bell,
 } from "lucide-react";
+import { getAdminContent } from "@/lib/content";
 
 export default async function AdminLayout({
   children,
@@ -30,6 +31,8 @@ export default async function AdminLayout({
     redirect("/admin/login");
   }
 
+  const content = getAdminContent();
+
   return (
     <div className="flex min-h-screen">
       {/* Dark Sidebar */}
@@ -40,7 +43,9 @@ export default async function AdminLayout({
             <div className="h-8 w-8 rounded-md bg-gradient-to-br from-neutral-700 to-neutral-900 flex items-center justify-center">
               <Package className="h-5 w-5 text-white" />
             </div>
-            <span className="font-semibold text-white">PackPlanet</span>
+            <span className="font-semibold text-white">
+              {content.site.name}
+            </span>
           </div>
           <Button
             variant="ghost"
@@ -57,7 +62,7 @@ export default async function AdminLayout({
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-500" />
             <input
               type="text"
-              placeholder="Поиск"
+              placeholder={content.navigation.search}
               className="w-full rounded-md bg-neutral-900 border border-neutral-800 py-2 pl-9 pr-4 text-sm text-neutral-200 placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-700"
             />
           </div>
@@ -69,45 +74,31 @@ export default async function AdminLayout({
             href="/admin/products"
             icon={<LayoutDashboard className="h-4 w-4" />}
           >
-            Панель управления
+            {content.navigation.dashboard}
           </NavLink>
-          <NavLink href="/admin/products" icon={<Package className="h-4 w-4" />}>
-            Товары
+          <NavLink
+            href="/admin/products"
+            icon={<Package className="h-4 w-4" />}
+          >
+            {content.navigation.products}
           </NavLink>
           <NavLink
             href="/admin/categories"
             icon={<FolderTree className="h-4 w-4" />}
           >
-            Категории
+            {content.navigation.categories}
           </NavLink>
           <NavLink
             href="/admin/partners"
             icon={<Handshake className="h-4 w-4" />}
           >
-            Партнеры
+            {content.navigation.partners}
           </NavLink>
           <NavLink
             href="/admin/price-list"
             icon={<FileText className="h-4 w-4" />}
           >
-            Прайс-лист
-          </NavLink>
-
-          <Separator className="my-4 bg-neutral-800" />
-
-          <NavLink href="#" icon={<Bell className="h-4 w-4" />}>
-            <div className="flex items-center justify-between flex-1">
-              <span>Уведомления</span>
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
-                2
-              </span>
-            </div>
-          </NavLink>
-          <NavLink href="#" icon={<HelpCircle className="h-4 w-4" />}>
-            Помощь и поддержка
-          </NavLink>
-          <NavLink href="#" icon={<Settings className="h-4 w-4" />}>
-            Настройки
+            {content.navigation.priceList}
           </NavLink>
         </nav>
 
@@ -123,7 +114,9 @@ export default async function AdminLayout({
               <p className="text-sm font-medium text-white truncate">
                 {user.username}
               </p>
-              <p className="text-xs text-neutral-400 truncate">Администратор</p>
+              <p className="text-xs text-neutral-400 truncate">
+                {content.navigation.administrator}
+              </p>
             </div>
             <form action={logout}>
               <Button

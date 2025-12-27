@@ -8,12 +8,14 @@ import { createCategory, updateCategory } from "./actions";
 import { Category } from "@/generated/prisma/client";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
+import type { AdminContent } from "@/lib/content";
 
 interface CategoryFormProps {
   category?: Category;
+  content: AdminContent;
 }
 
-export function CategoryForm({ category }: CategoryFormProps) {
+export function CategoryForm({ category, content }: CategoryFormProps) {
   const router = useRouter();
 
   const handleSubmit = async (formData: FormData) => {
@@ -29,19 +31,21 @@ export function CategoryForm({ category }: CategoryFormProps) {
       <CardContent className="pt-6">
         <form action={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="name">Название категории *</Label>
+            <Label htmlFor="name">{content.categoryForm.fields.name} *</Label>
             <Input
               id="name"
               name="name"
               required
               defaultValue={category?.name}
-              placeholder="напр., Упаковочные материалы, Этикетки, Коробки"
+              placeholder={content.categoryForm.fields.namePlaceholder}
             />
           </div>
 
           <div className="flex gap-3">
             <Button type="submit">
-              {category ? "Обновить категорию" : "Создать категорию"}
+              {category
+                ? content.categoryForm.buttons.update
+                : content.categoryForm.buttons.create}
             </Button>
             <Button
               type="button"
@@ -49,7 +53,7 @@ export function CategoryForm({ category }: CategoryFormProps) {
               onClick={() => router.back()}
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Отмена
+              {content.categoryForm.buttons.cancel}
             </Button>
           </div>
         </form>

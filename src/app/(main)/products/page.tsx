@@ -2,13 +2,16 @@ import { CatalogPageClient } from "@/components/catalog-page-client";
 import { SectionHeading } from "@/components/section-heading";
 import { Space } from "@/components/space";
 import { getProducts, getCategories } from "@/lib/queries/products";
+import { getCatalogContent } from "@/lib/content";
 import { Metadata } from "next";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 
+const content = getCatalogContent();
+
 export const metadata: Metadata = {
-  title: "Каталог - Планета Упаковки",
-  description: "Полный каталог упаковочной продукции и одноразовой посуды",
+  title: content.page.title,
+  description: content.page.description,
 };
 
 interface ProductsPageProps {
@@ -55,6 +58,7 @@ async function CatalogContent({ searchParams }: ProductsPageProps) {
       totalPages={productsData.totalPages}
       currentPage={productsData.currentPage}
       totalCount={productsData.totalCount}
+      content={content}
     />
   );
 }
@@ -63,7 +67,7 @@ export default function ProductsPage(props: ProductsPageProps) {
   return (
     <div className="min-h-screen">
       <section className="containerize py-12 md:py-16">
-        <SectionHeading>Каталог Продукции</SectionHeading>
+        <SectionHeading>{content.header.heading}</SectionHeading>
 
         <Space size="lg" />
 

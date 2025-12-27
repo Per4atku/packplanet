@@ -2,6 +2,7 @@ import { PrismaClient } from "@/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { ProductForm } from "../../product-form";
 import { notFound } from "next/navigation";
+import { getAdminContent } from "@/lib/content";
 
 const prisma_adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL,
@@ -16,6 +17,7 @@ export default async function EditProductPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const content = getAdminContent();
   const { id } = await params;
 
   const [product, categories] = await Promise.all([
@@ -35,10 +37,10 @@ export default async function EditProductPage({
   return (
     <div className="max-w-3xl space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Редактировать товар</h1>
-        <p className="text-neutral-600">Обновить информацию о товаре</p>
+        <h1 className="text-3xl font-bold">{content.productForm.editTitle}</h1>
+        <p className="text-neutral-600">{content.productForm.editDescription}</p>
       </div>
-      <ProductForm product={product} categories={categories} />
+      <ProductForm product={product} categories={categories} content={content} />
     </div>
   );
 }

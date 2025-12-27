@@ -7,8 +7,11 @@ import { Space } from "@/components/space";
 import { Download, Mail, MapPin, Phone, Clock, Package } from "lucide-react";
 import Link from "next/link";
 import { getFeaturedProducts, getLatestPriceList } from "@/lib/queries/products";
+import { getMainContent } from "@/lib/content";
 
 export default async function Home() {
+  const content = getMainContent();
+
   // Fetch featured products and latest price list
   const [featuredProducts, priceList] = await Promise.all([
     getFeaturedProducts(3),
@@ -20,19 +23,22 @@ export default async function Home() {
       <section className="containerize py-16 md:py-24 lg:py-32">
         <div className="mx-auto max-w-4xl text-center">
           <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
-            Ваш надежный поставщик{" "}
-            <span className="text-primary">упаковки</span>
+            {content.hero.title}{" "}
+            <span className="text-primary">{content.hero.titleHighlight}</span>
           </h1>
           <p className="mb-10 text-lg text-muted-foreground md:text-xl">
-            Одноразовая посуда и упаковка.
-            <br />
-            Быстрая доставка
+            {content.hero.subtitle.split('\n').map((line, i) => (
+              <span key={i}>
+                {line}
+                {i === 0 && <br />}
+              </span>
+            ))}
           </p>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Button size="lg" className="w-full sm:w-auto" asChild>
               <Link href="#price-list">
                 <Download className="mr-2 h-5 w-5" />
-                Прайс-лист
+                {content.hero.buttons.priceList}
               </Link>
             </Button>
             <Button
@@ -43,7 +49,7 @@ export default async function Home() {
             >
               <Link href="#contacts">
                 <Phone className="mr-2 h-5 w-5" />
-                Связаться с нами
+                {content.hero.buttons.contact}
               </Link>
             </Button>
           </div>
@@ -55,7 +61,7 @@ export default async function Home() {
       {/* Featured Products Section */}
       {featuredProducts.length > 0 && (
         <section className="containerize py-12 md:py-16">
-          <SectionHeading>Популярные Товары</SectionHeading>
+          <SectionHeading>{content.featuredProducts.heading}</SectionHeading>
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {featuredProducts.map((product) => (
@@ -86,15 +92,15 @@ export default async function Home() {
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <div>
               <h2 className="mb-4 text-4xl font-bold tracking-tight md:text-5xl">
-                Прайс-Лист
+                {content.priceList.heading}
               </h2>
               <p className="mb-8 text-lg text-muted-foreground">
-                Скачайте актуальный прайс-лист со всей продукцией и ценами
+                {content.priceList.description}
               </p>
               <Button size="lg" className="w-full sm:w-auto" asChild>
                 <a href={priceList.path} download={priceList.filename}>
                   <Download className="mr-2 h-5 w-5" />
-                  Скачать прайс-лист
+                  {content.priceList.downloadButton}
                 </a>
               </Button>
             </div>
@@ -129,7 +135,7 @@ export default async function Home() {
 
       {/* Partners Section */}
       <section className="containerize py-12 md:py-16">
-        <SectionHeading>Наши Партнеры</SectionHeading>
+        <SectionHeading>{content.partners.heading}</SectionHeading>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           <PartnerCard
@@ -175,22 +181,19 @@ export default async function Home() {
 
           <div className="lg:order-1">
             <h2 className="mb-4 text-4xl font-bold tracking-tight md:text-5xl">
-              Доставка <span className="text-primary">БЕСПЛАТНАЯ*</span>
+              {content.delivery.heading} <span className="text-primary">{content.delivery.headingHighlight}</span>
             </h2>
             <div className="mb-8 space-y-4 text-muted-foreground">
-              <p className="text-lg">
-                <strong className="text-foreground">
-                  * от 2000₽ (Центр, 1-ая Речка, Некрасовская, Третья рабочая)
-                </strong>
-              </p>
-              <p className="text-lg">
-                <strong className="text-foreground">
-                  * от 3000₽ (Отдаленные районы города)
-                </strong>
-              </p>
+              {content.delivery.conditions.map((condition, i) => (
+                <p key={i} className="text-lg">
+                  <strong className="text-foreground">
+                    {condition.text}
+                  </strong>
+                </p>
+              ))}
               <p className="mt-6 text-base">
-                На заказ менее 2000₽ — доставка{" "}
-                <strong className="text-foreground">450₽</strong>
+                {content.delivery.minOrderDelivery}{" "}
+                <strong className="text-foreground">{content.delivery.minOrderDeliveryPrice}</strong>
               </p>
             </div>
           </div>
@@ -201,15 +204,15 @@ export default async function Home() {
 
       {/* Contact Section */}
       <section id="contacts" className="containerize py-12 md:py-16">
-        <SectionHeading>Свяжитесь с нами</SectionHeading>
+        <SectionHeading>{content.contacts.heading}</SectionHeading>
         <p className="mb-12 text-center text-lg text-muted-foreground">
-          Заходите к нам, звоните или пишите — мы всегда готовы помочь вам!
+          {content.contacts.description}
         </p>
 
         <div className="mx-auto max-w-3xl">
           <div className="rounded-2xl border bg-card p-8 shadow-sm md:p-12">
             <h3 className="mb-8 text-2xl font-semibold">
-              Контактная информация
+              {content.contacts.cardTitle}
             </h3>
 
             <div className="space-y-6">
@@ -218,9 +221,9 @@ export default async function Home() {
                   <MapPin className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <h4 className="mb-1 font-semibold">Адрес</h4>
+                  <h4 className="mb-1 font-semibold">{content.contacts.address.label}</h4>
                   <p className="text-muted-foreground">
-                    Владивосток, Океанский проспект 54, 2 этаж
+                    {content.contacts.address.value}
                   </p>
                 </div>
               </div>
@@ -230,11 +233,11 @@ export default async function Home() {
                   <Clock className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <h4 className="mb-1 font-semibold">Время работы</h4>
+                  <h4 className="mb-1 font-semibold">{content.contacts.workingHours.label}</h4>
                   <p className="text-muted-foreground">
-                    Пн—Пт: 10:00—18:00
+                    {content.contacts.workingHours.weekdays}
                     <br />
-                    Сб—Вс: 10:00—17:00
+                    {content.contacts.workingHours.weekends}
                   </p>
                 </div>
               </div>
@@ -244,32 +247,18 @@ export default async function Home() {
                   <Phone className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <h4 className="mb-1 font-semibold">Телефоны</h4>
+                  <h4 className="mb-1 font-semibold">{content.contacts.phone.label}</h4>
                   <div className="space-y-1 text-muted-foreground">
-                    <p>
-                      <a
-                        href="tel:+78002347876"
-                        className="hover:text-primary"
-                      >
-                        8 (800) 234-78-76
-                      </a>
-                    </p>
-                    <p>
-                      <a
-                        href="tel:+74212444855"
-                        className="hover:text-primary"
-                      >
-                        +7 (421) 244-48-55
-                      </a>
-                    </p>
-                    <p>
-                      <a
-                        href="tel:+74232462476"
-                        className="hover:text-primary"
-                      >
-                        +7 (423) 246-24-76
-                      </a>
-                    </p>
+                    {content.contacts.phone.numbers.map((phone, i) => (
+                      <p key={i}>
+                        <a
+                          href={`tel:${phone.replace(/\s+/g, '')}`}
+                          className="hover:text-primary"
+                        >
+                          {phone}
+                        </a>
+                      </p>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -279,13 +268,13 @@ export default async function Home() {
                   <Mail className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <h4 className="mb-1 font-semibold">Почта</h4>
+                  <h4 className="mb-1 font-semibold">{content.contacts.email.label}</h4>
                   <p className="text-muted-foreground">
                     <a
-                      href="mailto:sinfo@wsk.ru"
+                      href={`mailto:${content.contacts.email.value}`}
                       className="hover:text-primary"
                     >
-                      sinfo@wsk.ru
+                      {content.contacts.email.value}
                     </a>
                   </p>
                 </div>
@@ -299,7 +288,7 @@ export default async function Home() {
                 rel="noopener noreferrer"
               >
                 <MapPin className="mr-2 h-5 w-5" />
-                Перейти в Яндекс-Карты
+                {content.contacts.mapButton}
               </a>
             </Button>
           </div>

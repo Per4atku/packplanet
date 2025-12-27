@@ -9,21 +9,24 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { getAdminContent } from "@/lib/content";
 
 export default function LoginPage() {
+  const content = getAdminContent();
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-neutral-50">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Вход в админ-панель</CardTitle>
+          <CardTitle>{content.login.title}</CardTitle>
           <CardDescription>
-            Войдите, чтобы получить доступ к панели управления
+            {content.login.description}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form action={login} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="username">Имя пользователя</Label>
+              <Label htmlFor="username">{content.login.usernameLabel}</Label>
               <Input
                 id="username"
                 name="username"
@@ -33,7 +36,7 @@ export default function LoginPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Пароль</Label>
+              <Label htmlFor="password">{content.login.passwordLabel}</Label>
               <Input
                 id="password"
                 name="password"
@@ -43,7 +46,7 @@ export default function LoginPage() {
               />
             </div>
             <Button type="submit" className="w-full">
-              Войти
+              {content.login.submitButton}
             </Button>
           </form>
         </CardContent>
