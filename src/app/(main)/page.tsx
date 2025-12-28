@@ -23,6 +23,9 @@ import {
   StaggerItem,
 } from "@/components/animations/stagger-container";
 
+// Force dynamic rendering - this page needs fresh data from database
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
   const content = getMainContent();
 

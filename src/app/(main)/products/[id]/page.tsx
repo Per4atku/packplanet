@@ -11,6 +11,9 @@ import { ProductMedia } from "@/components/product/ProductMedia";
 import { ProductDecisionZone } from "@/components/product/ProductDecisionZone";
 import { ProductCharacteristics } from "@/components/product/ProductCharacteristics";
 
+// Force dynamic rendering - this page needs fresh data from database
+export const dynamic = 'force-dynamic';
+
 interface ProductPageProps {
   params: Promise<{ id: string }>;
 }

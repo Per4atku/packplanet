@@ -8,6 +8,9 @@ import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FadeIn } from "@/components/animations/fade-in";
 
+// Force dynamic rendering - this page needs fresh data from database
+export const dynamic = 'force-dynamic';
+
 const content = getCatalogContent();
 
 export const metadata: Metadata = {
