@@ -43,8 +43,8 @@ pnpm-debug.log*
 lerna-debug.log*
 
 # Prisma
-/prisma/migrations/**/migration.sql
 /prisma/generated
+/src/generated/prisma
 
 # IDE and editors
 .idea/

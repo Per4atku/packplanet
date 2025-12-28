@@ -1,5 +1,6 @@
 import { PrismaClient } from "../src/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
+import { hash } from "bcryptjs";
 import "dotenv/config";
 
 const DATABASE_URL = process.env.DATABASE_URL;
@@ -18,7 +19,29 @@ const prisma = new PrismaClient({
 async function main() {
   console.log("Starting database seed...");
 
-  // Clear existing data
+  // Create admin user
+  console.log("Creating admin user...");
+  const adminUsername = process.env.ADMIN_USERNAME || "admin";
+  const adminPassword = process.env.ADMIN_PASSWORD || "admin123";
+
+  const existingAdmin = await prisma.user.findUnique({
+    where: { username: adminUsername },
+  });
+
+  if (existingAdmin) {
+    console.log(`Admin user "${adminUsername}" already exists, skipping...`);
+  } else {
+    const hashedPassword = await hash(adminPassword, 10);
+    await prisma.user.create({
+      data: {
+        username: adminUsername,
+        hashedPassword,
+      },
+    });
+    console.log(`Created admin user with username: ${adminUsername}`);
+  }
+
+  // Clear existing data (but keep users)
   console.log("Clearing existing data...");
   await prisma.product.deleteMany();
   await prisma.category.deleteMany();
