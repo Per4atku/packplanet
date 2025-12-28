@@ -34,7 +34,13 @@ export async function generateMetadata({
   return {
     title: product.name,
     description: product.description,
-    keywords: [product.name, product.sku, product.category.name, "одноразовая посуда", "упаковка"],
+    keywords: [
+      product.name,
+      product.sku,
+      product.category.name,
+      "одноразовая посуда",
+      "упаковка",
+    ],
     openGraph: {
       type: "website",
       url: productUrl,
@@ -71,9 +77,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
 
   // Get related products
-  const relatedProducts = product.linkedProductIds.length > 0
-    ? await getLinkedProducts(product.linkedProductIds)
-    : [];
+  const relatedProducts =
+    product.linkedProductIds.length > 0
+      ? await getLinkedProducts(product.linkedProductIds)
+      : [];
 
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://packplanet.ru";
 
@@ -107,22 +114,22 @@ export default async function ProductPage({ params }: ProductPageProps) {
               {product.heatProduct && (
                 <div className="inline-flex items-center gap-2 rounded-full bg-orange-500 px-3 py-1.5 shadow-lg">
                   <Flame className="h-4 w-4 text-white" />
-                  <span className="text-sm font-medium text-white">Популярный Товар</span>
+                  <span className="text-sm font-medium text-white">
+                    Популярный Товар
+                  </span>
                 </div>
               )}
               {product.wholesalePrice && product.wholesaleAmount && (
                 <div className="inline-flex items-center gap-2 rounded-full bg-primary px-3 py-1.5 shadow-lg">
                   <ShoppingCart className="h-4 w-4 text-white" />
                   <span className="text-sm font-medium text-white">
-                    Оптовая Цена: {product.wholesalePrice} руб от {product.wholesaleAmount} {product.unit}
+                    Оптовая Цена: {product.wholesalePrice} руб от{" "}
+                    {product.wholesaleAmount} {product.unit}
                   </span>
                 </div>
               )}
             </div>
-            <ProductMedia
-              images={product.images}
-              productName={product.name}
-            />
+            <ProductMedia images={product.images} productName={product.name} />
           </div>
 
           {/* Right Column: Decision Zone, Characteristics & Description */}
@@ -152,7 +159,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         {/* Related Products Section */}
         {relatedProducts.length > 0 && (
           <div className="mt-16">
-            <SectionHeading>Похожие товары</SectionHeading>
+            <SectionHeading>Сопутствующие товары</SectionHeading>
             <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {relatedProducts.map((relatedProduct) => (
                 <Link

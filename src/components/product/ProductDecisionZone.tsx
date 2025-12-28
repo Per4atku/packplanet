@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Card } from "@/components/ui/card";
 import { ProductMetadata } from "./ProductMetadata";
 import { ProductPrice } from "./ProductPrice";
 import { QuantitySelector } from "./QuantitySelector";
@@ -24,7 +23,7 @@ export function ProductDecisionZone({ product }: ProductDecisionZoneProps) {
   const [quantity, setQuantity] = useState(1);
 
   return (
-    <Card className="lg:sticky lg:top-24 lg:self-start p-6 space-y-4">
+    <div className=" lg:top-24 lg:self-start space-y-4">
       <ProductMetadata
         sku={product.sku}
         categoryName={product.categoryName}
@@ -38,6 +37,6 @@ export function ProductDecisionZone({ product }: ProductDecisionZoneProps) {
         wholesaleAmount={product.wholesaleAmount}
         quantity={quantity}
       />
-    </Card>
+    </div>
   );
 }

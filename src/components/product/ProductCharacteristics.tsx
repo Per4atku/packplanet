@@ -34,9 +34,7 @@ export function ProductCharacteristics({
       {description && (
         <>
           <h2 className="text-xl font-semibold mt-8">Описание</h2>
-          <p className="text-sm leading-relaxed text-muted-foreground">
-            {description}
-          </p>
+          <p className="leading-relaxed text-muted-foreground">{description}</p>
         </>
       )}
     </div>
