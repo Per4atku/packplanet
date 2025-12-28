@@ -35,7 +35,7 @@ export function HeaderAnimated({
           <motion.div
             whileHover={{ scale: 1.05, rotate: 5 }}
             transition={{ duration: 0.2 }}
-            className="flex h-14 w-14 items-center justify-center"
+            className="flex h-16 w-16 items-center justify-center"
           >
             <Image src={"/logo.png"} width={500} height={500} alt="" />
           </motion.div>
