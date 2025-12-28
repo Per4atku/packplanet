@@ -15,7 +15,6 @@ export function ProductCharacteristics({
 }: ProductCharacteristicsProps) {
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-semibold">Характеристики</h2>
       <div className="space-y-3">
         <div className="flex justify-between py-2">
           <span className="text-muted-foreground">Артикул</span>
