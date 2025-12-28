@@ -13,6 +13,30 @@ const content = getCatalogContent();
 export const metadata: Metadata = {
   title: content.page.title,
   description: content.page.description,
+  keywords: ["каталог упаковки", "одноразовая посуда", "пищевая упаковка", "купить упаковку", "каталог товаров"],
+  openGraph: {
+    type: "website",
+    title: content.page.title,
+    description: content.page.description,
+    siteName: "Планета Упаковки",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Каталог товаров - Планета Упаковки",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: content.page.title,
+    description: content.page.description,
+    images: ["/og-image.jpg"],
+  },
+  alternates: {
+    canonical: "/products",
+  },
 };
 
 interface ProductsPageProps {
@@ -66,7 +90,7 @@ async function CatalogContent({ searchParams }: ProductsPageProps) {
 
 export default function ProductsPage(props: ProductsPageProps) {
   return (
-    <div className="min-h-screen">
+    <main className="min-h-screen">
       <section className="containerize py-12 md:py-16">
         <FadeIn>
           <SectionHeading>{content.header.heading}</SectionHeading>
@@ -78,6 +102,6 @@ export default function ProductsPage(props: ProductsPageProps) {
           <CatalogContent searchParams={props.searchParams} />
         </Suspense>
       </section>
-    </div>
+    </main>
   );
 }

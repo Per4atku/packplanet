@@ -18,7 +18,10 @@ import {
   HeroButtons,
 } from "@/components/animations/hero-section";
 import { FadeIn } from "@/components/animations/fade-in";
-import { StaggerContainer, StaggerItem } from "@/components/animations/stagger-container";
+import {
+  StaggerContainer,
+  StaggerItem,
+} from "@/components/animations/stagger-container";
 
 export default async function Home() {
   const content = getMainContent();
@@ -29,7 +32,7 @@ export default async function Home() {
     getLatestPriceList(),
   ]);
   return (
-    <div className="min-h-screen">
+    <main className="min-h-screen">
       {/* Hero Section */}
       <HeroSection>
         <div className="mx-auto max-w-4xl text-center flex flex-col items-center">
@@ -67,7 +70,7 @@ export default async function Home() {
         </div>
       </HeroSection>
 
-      <Space size="2xl" />
+      <Space size="lg" />
 
       {/* Featured Products Section */}
       {featuredProducts.length > 0 && (
@@ -158,7 +161,10 @@ export default async function Home() {
           <SectionHeading>{content.partners.heading}</SectionHeading>
         </FadeIn>
 
-        <StaggerContainer className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3" staggerDelay={0.15}>
+        <StaggerContainer
+          className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
+          staggerDelay={0.15}
+        >
           <StaggerItem>
             <PartnerCard
               name="AlphaCoffee"
@@ -188,7 +194,11 @@ export default async function Home() {
       {/* Delivery Section */}
       <section id="delivery" className="containerize py-12 md:py-16">
         <div className="grid items-center gap-12 lg:grid-cols-2">
-          <FadeIn direction="right" delay={0.2} className="relative flex items-center justify-center lg:order-2">
+          <FadeIn
+            direction="right"
+            delay={0.2}
+            className="relative flex items-center justify-center lg:order-2"
+          >
             {/* Delivery truck illustration placeholder */}
             <div className="relative aspect-square w-full max-w-md">
               <div className="flex h-full w-full items-center justify-center rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 p-12">
@@ -344,6 +354,6 @@ export default async function Home() {
       </section>
 
       <Space size="2xl" />
-    </div>
+    </main>
   );
 }

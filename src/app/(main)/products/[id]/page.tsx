@@ -9,6 +9,7 @@ import { ArrowLeft, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/product-card";
 import { SectionHeading } from "@/components/section-heading";
+import { ProductStructuredData } from "@/components/structured-data";
 
 interface ProductPageProps {
   params: Promise<{ id: string }>;
@@ -22,13 +23,42 @@ export async function generateMetadata({
 
   if (!product) {
     return {
-      title: "Товар не найден - Планета Упаковки",
+      title: "Товар не найден",
     };
   }
 
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://packplanet.ru";
+  const productUrl = `${baseUrl}/products/${id}`;
+  const productImage = product.images[0] || `${baseUrl}/og-image.jpg`;
+
   return {
-    title: `${product.name} - Планета Упаковки`,
+    title: product.name,
     description: product.description,
+    keywords: [product.name, product.sku, product.category.name, "одноразовая посуда", "упаковка"],
+    openGraph: {
+      type: "website",
+      url: productUrl,
+      title: product.name,
+      description: product.description,
+      images: [
+        {
+          url: productImage,
+          width: 800,
+          height: 600,
+          alt: product.name,
+        },
+      ],
+      siteName: "Планета Упаковки",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: product.name,
+      description: product.description,
+      images: [productImage],
+    },
+    alternates: {
+      canonical: productUrl,
+    },
   };
 }
 
@@ -45,8 +75,18 @@ export default async function ProductPage({ params }: ProductPageProps) {
     ? await getLinkedProducts(product.linkedProductIds)
     : [];
 
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://packplanet.ru";
+
   return (
-    <div className="min-h-screen">
+    <main className="min-h-screen">
+      <ProductStructuredData
+        name={product.name}
+        description={product.description}
+        price={product.price}
+        sku={product.sku}
+        images={product.images}
+        url={`${baseUrl}/products/${id}`}
+      />
       <section className="containerize py-12 md:py-16">
         {/* Back to Catalog Link */}
         <div className="mb-8">
@@ -202,6 +242,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </div>
         )}
       </section>
-    </div>
+    </main>
   );
 }

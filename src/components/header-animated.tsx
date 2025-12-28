@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Phone } from "lucide-react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 interface HeaderAnimatedProps {
   siteName: string;
@@ -34,9 +35,9 @@ export function HeaderAnimated({
           <motion.div
             whileHover={{ scale: 1.05, rotate: 5 }}
             transition={{ duration: 0.2 }}
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-primary"
+            className="flex h-14 w-14 items-center justify-center"
           >
-            <span className="text-xl font-bold text-white">{siteShortName}</span>
+            <Image src={"/logo.png"} width={500} height={500} alt="" />
           </motion.div>
           <span className="hidden font-bold text-foreground sm:inline-block group-hover:text-primary transition-colors">
             {siteName}
@@ -44,7 +45,10 @@ export function HeaderAnimated({
         </Link>
 
         <nav className="hidden items-center gap-6 md:flex">
-          <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.2 }}
+          >
             <Link
               href="/products"
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
@@ -52,7 +56,10 @@ export function HeaderAnimated({
               {nav.catalog}
             </Link>
           </motion.div>
-          <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.2 }}
+          >
             <Link
               href="/#price-list"
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
@@ -60,7 +67,10 @@ export function HeaderAnimated({
               {nav.priceList}
             </Link>
           </motion.div>
-          <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.2 }}
+          >
             <Link
               href="/#delivery"
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
@@ -68,7 +78,10 @@ export function HeaderAnimated({
               {nav.delivery}
             </Link>
           </motion.div>
-          <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.2 }}
+          >
             <Link
               href="/#contacts"
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
