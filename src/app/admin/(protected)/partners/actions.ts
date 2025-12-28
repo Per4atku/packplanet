@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { writeFile, mkdir, unlink } from "fs/promises";
 import { join } from "path";
 import { redirect } from "next/navigation";
+import { validateRequest } from "@/lib/auth";
 
 const prisma_adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL,
@@ -16,6 +17,12 @@ const prisma = new PrismaClient({
 });
 
 export async function createPartner(formData: FormData) {
+  const { user } = await validateRequest();
+
+  if (!user) {
+    redirect("/admin/login");
+  }
+
   const name = formData.get("name") as string;
   const description = formData.get("description") as string || "";
 
@@ -49,6 +56,12 @@ export async function createPartner(formData: FormData) {
 }
 
 export async function updatePartner(id: string, formData: FormData) {
+  const { user } = await validateRequest();
+
+  if (!user) {
+    redirect("/admin/login");
+  }
+
   const name = formData.get("name") as string;
   const description = formData.get("description") as string || "";
 
@@ -98,6 +111,12 @@ export async function updatePartner(id: string, formData: FormData) {
 }
 
 export async function deletePartner(id: string) {
+  const { user } = await validateRequest();
+
+  if (!user) {
+    redirect("/admin/login");
+  }
+
   const partner = await prisma.partner.findUnique({
     where: { id },
   });

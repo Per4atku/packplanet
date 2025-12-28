@@ -5,6 +5,8 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { revalidatePath } from "next/cache";
 import { writeFile, mkdir, unlink, readdir } from "fs/promises";
 import { join } from "path";
+import { validateRequest } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 const prisma_adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL,
@@ -15,6 +17,12 @@ const prisma = new PrismaClient({
 });
 
 export async function uploadPriceList(formData: FormData) {
+  const { user } = await validateRequest();
+
+  if (!user) {
+    redirect("/admin/login");
+  }
+
   const file = formData.get("file") as File;
 
   if (!file || file.size === 0) {
@@ -63,6 +71,12 @@ export async function uploadPriceList(formData: FormData) {
 }
 
 export async function deletePriceList(id: string) {
+  const { user } = await validateRequest();
+
+  if (!user) {
+    redirect("/admin/login");
+  }
+
   const priceList = await prisma.priceList.findUnique({
     where: { id },
   });
