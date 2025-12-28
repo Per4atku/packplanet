@@ -1,127 +1,110 @@
+import { Phone, Mail, MapPin } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
-import { Mail, MapPin, Phone, Clock } from "lucide-react";
-import { getMainContent } from "@/lib/content";
 
-export function Footer() {
-  const content = getMainContent();
+const navLinks = [
+  { href: "/", name: "Главная" },
+  { href: "/products", name: "Каталог" },
+  { href: "/#price-list", name: "Прайс-Лист" },
+  { href: "/#delivery", name: "Условия Доставки" },
+  { href: "/#contacts", name: "Наши Контакты" },
+];
+const phones = [
+  "8 (800) 234-78-75",
+  "+7 (423) 245-78-75",
+  "+7 (423) 244-65-55",
+];
 
+export const Footer = () => {
   return (
-    <footer className="border-t bg-slate-950 text-slate-50">
-      <div className="containerize py-12 md:py-16">
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+    <footer className="bg-gray-900 text-white py-8">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Info */}
-          <div>
-            <div className="mb-4 flex items-center gap-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary">
-                <span className="text-xl font-bold">{content.site.shortName}</span>
+          <div className="space-y-4">
+            <div className="flex items-center space-x-2">
+              <div className="w-14 h-14 rounded-lg flex items-center justify-center">
+                <Image
+                  src={"/logo.png"}
+                  width={500}
+                  height={500}
+                  alt=""
+                  className="w-14 h-14"
+                />
               </div>
-              <span className="font-bold">{content.site.name}</span>
+              <div>
+                <h3 className="font-bold text-lg">Планета Упаковки</h3>
+                <p className="text-xs text-gray-400">Planeta Upakovki</p>
+              </div>
             </div>
-            <p className="text-sm text-slate-400">
-              {content.site.taglineExtended.split('\n').map((line, i) => (
-                <span key={i}>
-                  {line}
-                  {i === 0 && <br />}
-                </span>
-              ))}
+            <p className="text-gray-300 text-sm">
+              Ваш надежный поставщик упаковочных материалов и одноразовой
+              посуды.
             </p>
           </div>
 
-          {/* Quick Links */}
+          {/* Navigation (linked to navLinks) */}
           <div>
-            <h3 className="mb-4 font-semibold">{content.footer.quickLinks.title}</h3>
+            <h4 className="font-semibold mb-4 text-eco-green">Навигация</h4>
             <ul className="space-y-2 text-sm">
-              <li>
-                <Link
-                  href="/products"
-                  className="text-slate-400 transition-colors hover:text-primary"
-                >
-                  {content.footer.quickLinks.catalog}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#price-list"
-                  className="text-slate-400 transition-colors hover:text-primary"
-                >
-                  {content.footer.quickLinks.priceList}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#delivery"
-                  className="text-slate-400 transition-colors hover:text-primary"
-                >
-                  {content.footer.quickLinks.delivery}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#contacts"
-                  className="text-slate-400 transition-colors hover:text-primary"
-                >
-                  {content.footer.quickLinks.contacts}
-                </Link>
-              </li>
+              {navLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-gray-300 hover:text-white transition-colors"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Contacts */}
+          {/* Contact Info */}
           <div>
-            <h3 className="mb-4 font-semibold">{content.footer.contactsSection.title}</h3>
-            <ul className="space-y-3 text-sm text-slate-400">
-              <li className="flex items-start gap-2">
-                <Phone className="mt-0.5 h-4 w-4 flex-shrink-0" />
-                <div>
-                  {content.footer.contactsSection.phones.map((phone, i) => (
-                    <span key={i}>
-                      <a href={`tel:${phone.replace(/\s+/g, '')}`} className="hover:text-primary">
-                        {phone}
-                      </a>
-                      {i < content.footer.contactsSection.phones.length - 1 && <br />}
-                    </span>
-                  ))}
-                </div>
-              </li>
-              <li className="flex items-start gap-2">
-                <Mail className="mt-0.5 h-4 w-4 flex-shrink-0" />
-                <a href={`mailto:${content.footer.contactsSection.email}`} className="hover:text-primary">
-                  {content.footer.contactsSection.email}
-                </a>
-              </li>
-            </ul>
+            <h4 className="font-semibold mb-4 text-eco-green">Контакты</h4>
+            <div className="space-y-3 text-sm">
+              <div className="flex items-center space-x-2">
+                <Phone className="w-4 h-4 text-eco-green" />
+                <span className="text-gray-300">{phones[0]}</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Mail className="w-4 h-4 text-eco-green" />
+                <span className="text-gray-300">pack-w@mail.ru</span>
+              </div>
+              <div className="flex items-start space-x-2">
+                <MapPin className="w-4 h-4 text-eco-green mt-0.5" />
+                <span className="text-gray-300">
+                  Океанский проспект, 54
+                  <br />2 этаж, Владивосток
+                </span>
+              </div>
+            </div>
           </div>
 
           {/* Working Hours */}
           <div>
-            <h3 className="mb-4 font-semibold">{content.footer.workingHours.title}</h3>
-            <div className="space-y-3 text-sm text-slate-400">
-              <div className="flex items-start gap-2">
-                <Clock className="mt-0.5 h-4 w-4 flex-shrink-0" />
-                <div>
-                  <p>{content.footer.workingHours.weekdays}</p>
-                  <p>{content.footer.workingHours.weekends}</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-2">
-                <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0" />
-                <p>
-                  {content.footer.workingHours.address.split('\n').map((line, i) => (
-                    <span key={i}>
-                      {line}
-                      {i === 0 && <br />}
-                    </span>
-                  ))}
-                </p>
-              </div>
+            <h4 className="font-semibold mb-4 text-eco-green">Режим работы</h4>
+            <div className="space-y-2 text-sm text-gray-300">
+              <p>Понедельник–Пятница</p>
+              <p className="font-medium">10:00–18:00</p>
+              <p>Суббота–Воскресенье</p>
+              <p className="font-medium">10:00–17:00</p>
             </div>
           </div>
         </div>
 
-        <div className="mt-12 border-t border-slate-800 pt-8 text-center text-sm text-slate-400">
-          <p>{content.footer.copyright}</p>
+        <div className="border-t border-gray-800 mt-8 pt-8">
+          <div className="flex justify-center text-sm text-gray-400">
+            <p>
+              &copy; {new Date().getFullYear()} Планета Упаковки. Все права
+              защищены.
+            </p>
+          </div>
         </div>
       </div>
     </footer>
   );
-}
+};
+
+export default Footer;

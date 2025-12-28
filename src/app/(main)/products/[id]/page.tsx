@@ -1,15 +1,15 @@
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ProductCarousel } from "@/components/product-carousel";
 import { getProductById, getLinkedProducts } from "@/lib/queries/products";
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Package } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/product-card";
 import { SectionHeading } from "@/components/section-heading";
 import { ProductStructuredData } from "@/components/structured-data";
+import { ProductMedia } from "@/components/product/ProductMedia";
+import { ProductDecisionZone } from "@/components/product/ProductDecisionZone";
+import { ProductCharacteristics } from "@/components/product/ProductCharacteristics";
 
 interface ProductPageProps {
   params: Promise<{ id: string }>;
@@ -99,120 +99,40 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </div>
 
         {/* Product Details */}
-        <div className="grid gap-8 lg:grid-cols-2">
-          {/* Left Column: Image Carousel */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+          {/* Left Column: Product Media */}
           <div>
-            <ProductCarousel
+            <ProductMedia
               images={product.images}
               productName={product.name}
             />
           </div>
 
-          {/* Right Column: Product Information */}
-          <div className="space-y-6">
-            <div>
-              <Badge variant="outline" className="mb-3">
-                Арт: {product.sku}
-              </Badge>
-              <h1 className="mb-2 text-3xl font-bold md:text-4xl">
-                {product.name}
-              </h1>
-              <p className="text-lg text-muted-foreground">
-                {product.description}
-              </p>
-            </div>
-
-            {/* Price Card */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Package className="h-5 w-5" />
-                  Цена и условия
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <p className="text-sm text-muted-foreground">
-                    Розничная цена
-                  </p>
-                  <p className="text-3xl font-bold text-primary">
-                    {product.price} руб
-                    <span className="text-lg text-muted-foreground">
-                      /{product.unit}
-                    </span>
-                  </p>
-                </div>
-
-                {product.wholesalePrice && product.wholesaleAmount && (
-                  <div className="rounded-lg bg-muted p-4">
-                    <p className="mb-1 text-sm font-semibold">Оптовая цена</p>
-                    <p className="text-xl font-bold">
-                      {product.wholesalePrice} руб
-                      <span className="text-sm text-muted-foreground">
-                        /{product.unit}
-                      </span>
-                    </p>
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      При заказе от {product.wholesaleAmount} {product.unit}
-                    </p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Product Details Card */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Характеристики</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex justify-between border-b pb-2">
-                  <span className="text-muted-foreground">Артикул</span>
-                  <span className="font-semibold">{product.sku}</span>
-                </div>
-                <div className="flex justify-between border-b pb-2">
-                  <span className="text-muted-foreground">Категория</span>
-                  <span className="font-semibold">{product.category.name}</span>
-                </div>
-                <div className="flex justify-between border-b pb-2">
-                  <span className="text-muted-foreground">
-                    Единица измерения
-                  </span>
-                  <span className="font-semibold">{product.unit}</span>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Contact Information */}
-            <Card className="bg-primary/5">
-              <CardContent className="pt-6">
-                <p className="mb-4 text-sm text-muted-foreground">
-                  Для оформления заказа свяжитесь с нами по телефону или
-                  электронной почте
-                </p>
-                <div className="space-y-2 text-sm">
-                  <p>
-                    <span className="font-semibold">Телефон:</span>{" "}
-                    <a
-                      href="tel:+78002347876"
-                      className="text-primary hover:underline"
-                    >
-                      8 (800) 234-78-76
-                    </a>
-                  </p>
-                  <p>
-                    <span className="font-semibold">Email:</span>{" "}
-                    <a
-                      href="mailto:sinfo@wsk.ru"
-                      className="text-primary hover:underline"
-                    >
-                      sinfo@wsk.ru
-                    </a>
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+          {/* Right Column: Decision Zone (Sticky on desktop) */}
+          <div>
+            <ProductDecisionZone
+              product={{
+                sku: product.sku,
+                name: product.name,
+                categoryName: product.category.name,
+                unit: product.unit,
+                price: product.price,
+                wholesalePrice: product.wholesalePrice,
+                wholesaleAmount: product.wholesaleAmount,
+                isHot: product.heatProduct,
+              }}
+            />
           </div>
+        </div>
+
+        {/* Secondary Information */}
+        <div className="mt-16 max-w-3xl">
+          <ProductCharacteristics
+            sku={product.sku}
+            categoryName={product.category.name}
+            unit={product.unit}
+            description={product.description}
+          />
         </div>
 
         {/* Related Products Section */}
