@@ -11,8 +11,19 @@ import {
 } from "@/components/ui/card";
 import { getAdminContent } from "@/lib/content";
 
-export default function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
   const content = getAdminContent();
+  const params = await searchParams;
+  const error = params.error;
+
+  const errorMessages = {
+    missing_fields: "Пожалуйста, заполните все поля",
+    invalid_credentials: "Неверное имя пользователя или пароль",
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-neutral-50">
@@ -25,6 +36,11 @@ export default function LoginPage() {
         </CardHeader>
         <CardContent>
           <form action={login} className="space-y-4">
+            {error && (
+              <div className="rounded-md bg-red-50 border border-red-200 p-3 text-sm text-red-800">
+                {errorMessages[error as keyof typeof errorMessages] || "Произошла ошибка"}
+              </div>
+            )}
             <div className="space-y-2">
               <Label htmlFor="username">{content.login.usernameLabel}</Label>
               <Input

@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { writeFile, mkdir, unlink } from "fs/promises";
 import { join } from "path";
 import { redirect } from "next/navigation";
+import { validateRequest } from "@/lib/auth";
 
 const prisma_adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL,
@@ -16,6 +17,12 @@ const prisma = new PrismaClient({
 });
 
 export async function createProduct(formData: FormData) {
+  const { user } = await validateRequest();
+
+  if (!user) {
+    redirect("/admin/login");
+  }
+
   const name = formData.get("name") as string;
   const sku = formData.get("sku") as string;
   const price = parseFloat(formData.get("price") as string);
@@ -69,6 +76,12 @@ export async function createProduct(formData: FormData) {
 }
 
 export async function updateProduct(id: string, formData: FormData) {
+  const { user } = await validateRequest();
+
+  if (!user) {
+    redirect("/admin/login");
+  }
+
   const name = formData.get("name") as string;
   const sku = formData.get("sku") as string;
   const price = parseFloat(formData.get("price") as string);
@@ -129,6 +142,12 @@ export async function updateProduct(id: string, formData: FormData) {
 }
 
 export async function deleteProduct(id: string) {
+  const { user } = await validateRequest();
+
+  if (!user) {
+    redirect("/admin/login");
+  }
+
   const product = await prisma.product.findUnique({
     where: { id },
   });

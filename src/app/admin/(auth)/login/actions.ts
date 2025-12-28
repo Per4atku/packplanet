@@ -20,7 +20,7 @@ export async function login(formData: FormData) {
   const password = formData.get("password") as string;
 
   if (!username || !password) {
-    throw new Error("Username and password are required");
+    redirect("/admin/login?error=missing_fields");
   }
 
   const user = await prisma.user.findUnique({
@@ -28,13 +28,13 @@ export async function login(formData: FormData) {
   });
 
   if (!user) {
-    throw new Error("Invalid username or password");
+    redirect("/admin/login?error=invalid_credentials");
   }
 
   const validPassword = await compare(password, user.hashedPassword);
 
   if (!validPassword) {
-    throw new Error("Invalid username or password");
+    redirect("/admin/login?error=invalid_credentials");
   }
 
   const session = await lucia.createSession(user.id, {});
