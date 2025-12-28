@@ -1,93 +1,84 @@
-# ============================================
 # Production Dockerfile for Next.js + Prisma
-# ============================================
+# Optimized for low-memory VPS (1GB RAM)
+# Build for linux/amd64 explicitly (MacOS ARM → Ubuntu AMD64)
 
-# Stage 1: Dependencies
-FROM node:20-alpine AS deps
+FROM --platform=linux/amd64 node:20-alpine AS base
+
+# Install dependencies only when needed
+FROM base AS deps
+WORKDIR /app
 
 # Install pnpm
 RUN corepack enable && corepack prepare pnpm@latest --activate
-
-# Install libc6-compat for Alpine compatibility
-RUN apk add --no-cache libc6-compat
-
-WORKDIR /app
 
 # Copy package files
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY package.json pnpm-lock.yaml ./
+COPY prisma ./prisma/
 
 # Install dependencies
-RUN pnpm install --frozen-lockfile
-
-# ============================================
-# Stage 2: Builder
-FROM node:20-alpine AS builder
-
-# Install pnpm
-RUN corepack enable && corepack prepare pnpm@latest --activate
-
-WORKDIR /app
-
-# Copy dependencies from deps stage
-COPY --from=deps /app/node_modules ./node_modules
-
-# Copy all project files
-COPY . .
+RUN pnpm install --frozen-lockfile --prod=false
 
 # Generate Prisma Client
 RUN pnpm prisma generate
 
-# Build Next.js application
-RUN pnpm build
-
-# ============================================
-# Stage 3: Production Runner
-FROM node:20-alpine AS runner
+# Builder stage - build the application
+FROM base AS builder
+WORKDIR /app
 
 # Install pnpm
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
-WORKDIR /app
+# Copy dependencies from deps stage
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/src/generated ./src/generated
 
-# Set production environment
+# Copy application source
+COPY . .
+
+# Set build-time environment
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Create non-root user
-RUN addgroup --system --gid 1001 nodejs && \
-    adduser --system --uid 1001 nextjs
+# Build Next.js application
+RUN pnpm build
+
+# Production runner stage
+FROM base AS runner
+WORKDIR /app
+
+# Install pnpm (needed for potential runtime scripts)
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# Create non-root user for security
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
 
 # Copy necessary files from builder
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/pnpm-lock.yaml ./pnpm-lock.yaml
-COPY --from=builder /app/pnpm-workspace.yaml ./pnpm-workspace.yaml
+COPY --from=builder /app/prisma ./prisma
 
 # Copy Next.js build output
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Copy Prisma files for migrations
-COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
-# Copy generated Prisma Client (custom output location)
-COPY --from=builder /app/src/generated ./src/generated
-# Copy Prisma binaries from node_modules (only if they exist)
-COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+# Copy Prisma generated client
+COPY --from=builder --chown=nextjs:nodejs /app/src/generated ./src/generated
 
-# Create uploads directory for price lists and product images
-RUN mkdir -p /app/public/uploads/products /app/public/uploads/pricelists /app/public/uploads/partners && \
-    chown -R nextjs:nodejs /app/public/uploads
+# Create uploads directory with correct permissions
+RUN mkdir -p /app/uploads && chown nextjs:nodejs /app/uploads
 
 # Switch to non-root user
 USER nextjs
 
-# Expose port 3000
+# Expose port (internal only, not public)
 EXPOSE 3000
 
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
 # Start the application
-# Note: Migrations should be run separately before starting the app
 CMD ["node", "server.js"]

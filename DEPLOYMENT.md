@@ -1,686 +1,632 @@
-# Pack Planet - Production Deployment Guide
+# Production Deployment Guide
 
-This guide provides step-by-step instructions for deploying Pack Planet to a VPS using Docker, Docker Compose, and Nginx.
+This guide provides step-by-step instructions for deploying PackPlanet to a VPS with limited resources (1GB RAM, 15GB disk).
 
-## Table of Contents
+## Overview
 
-1. [Prerequisites](#prerequisites)
-2. [Initial VPS Setup](#initial-vps-setup)
-3. [Install Required Software](#install-required-software)
-4. [Deploy the Application](#deploy-the-application)
-5. [Running Database Migrations](#running-database-migrations)
-6. [Starting the Application](#starting-the-application)
-7. [Updating the Application](#updating-the-application)
-8. [Monitoring and Logs](#monitoring-and-logs)
-9. [SSL/HTTPS Configuration](#sslhttps-configuration)
-10. [Troubleshooting](#troubleshooting)
+The deployment architecture:
 
----
+- **Build Location**: GitHub Actions (CI/CD)
+- **Image Registry**: GitHub Container Registry (ghcr.io)
+- **VPS Role**: Pull and run pre-built images only (NO building on VPS)
+- **Platform**: Linux AMD64
+- **Services**: Next.js app + PostgreSQL + Nginx
 
 ## Prerequisites
 
-- A VPS with Ubuntu 20.04+ or Debian 11+ (minimum 2GB RAM, 20GB storage)
-- Root or sudo access to the server
-- A domain name pointed to your server's IP address (optional but recommended)
-- Git installed on the server
+- Ubuntu VPS with 1GB RAM, 15GB disk
+- SSH access to VPS
+- GitHub account with repository access
+- Domain or IP address (optional, can use IP)
 
 ---
 
-## Initial VPS Setup
+## Part 1: Initial VPS Setup
 
-### 1. Connect to Your VPS
+### 1.1 Connect to VPS
 
 ```bash
-ssh root@your-server-ip
+ssh root@your-vps-ip
 ```
 
-### 2. Update System Packages
+### 1.2 Update System
 
 ```bash
 apt update && apt upgrade -y
 ```
 
-### 3. Create a Non-Root User (Recommended)
+### 1.3 Install Docker
 
 ```bash
-adduser packplanet
-usermod -aG sudo packplanet
-su - packplanet
-```
-
----
-
-## Install Required Software
-
-### 1. Install Docker
-
-```bash
-# Remove old versions (if any)
-sudo apt remove docker docker-engine docker.io containerd runc
-
-# Install prerequisites
-sudo apt update
-sudo apt install -y ca-certificates curl gnupg lsb-release
-
-# Add Docker's official GPG key
-sudo mkdir -p /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-
-# Set up repository
-echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-# Install Docker Engine
-sudo apt update
-sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-
-# Add current user to docker group
-sudo usermod -aG docker $USER
-newgrp docker
+# Install Docker
+curl -fsSL https://get.docker.com -o get-docker.sh
+sh get-docker.sh
 
 # Verify installation
 docker --version
+```
+
+### 1.4 Install Docker Compose
+
+Docker Compose v2 is now included with Docker, but verify:
+
+```bash
 docker compose version
 ```
 
-### 2. Install Git (if not already installed)
+If not available:
 
 ```bash
-sudo apt install -y git
+apt install docker-compose-plugin
+```
+
+### 1.5 Create Application Directory
+
+```bash
+mkdir -p /opt/packplanet
+cd /opt/packplanet
 ```
 
 ---
 
-## Deploy the Application
+## Part 2: Configure Environment
 
-### 1. Clone the Repository
+### 2.1 Download Required Files from Repository
+
+You need these files on your VPS:
+- `docker-compose.yml`
+- `nginx/nginx.conf`
+
+Option A: Clone the repository (if private repo is accessible):
 
 ```bash
-cd /home/packplanet
-git clone https://github.com/your-username/packplanet.git
-cd packplanet
+git clone https://github.com/YOUR-USERNAME/packplanet.git /opt/packplanet
+cd /opt/packplanet
 ```
 
-### 2. Configure Environment Variables
-
-Create a `.env` file in the project root:
+Option B: Download specific files only:
 
 ```bash
-cp .env.example .env
+cd /opt/packplanet
+
+# Download docker-compose.yml
+curl -O https://raw.githubusercontent.com/YOUR-USERNAME/packplanet/main/docker-compose.yml
+
+# Create nginx directory and download config
+mkdir -p nginx
+curl -o nginx/nginx.conf https://raw.githubusercontent.com/YOUR-USERNAME/packplanet/main/nginx/nginx.conf
+```
+
+### 2.2 Create `.env` File
+
+```bash
 nano .env
 ```
 
-Update the following values in `.env`:
+Copy from `.env.example` and customize:
 
 ```env
-# ============================================
-# Database Configuration
-# ============================================
-DATABASE_URL="postgresql://postgres:YOUR_SECURE_PASSWORD@postgres:5432/packplanet?schema=public"
-
-# PostgreSQL Configuration (for Docker Compose)
+# PostgreSQL Configuration
 POSTGRES_DB=packplanet
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=YOUR_SECURE_PASSWORD
+POSTGRES_USER=packplanet_user
+POSTGRES_PASSWORD=YOUR_SECURE_PASSWORD_HERE
 
-# ============================================
-# Application Configuration
-# ============================================
-NEXT_PUBLIC_SITE_URL="https://your-domain.com"
+# Database URL - CRITICAL: Use 'postgres' as hostname (Docker service name)
+DATABASE_URL=postgres://packplanet_user:YOUR_SECURE_PASSWORD_HERE@postgres:5432/packplanet
 
+# Admin Authentication
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=YOUR_ADMIN_PASSWORD_HERE
+
+# GitHub Repository (format: username/repo)
+GITHUB_REPOSITORY=YOUR-USERNAME/packplanet
+
+# Node Environment
 NODE_ENV=production
-
-NEXT_TELEMETRY_DISABLED=1
-
-PORT=3000
 ```
 
-**Important:**
-- Replace `YOUR_SECURE_PASSWORD` with a strong, randomly generated password
-- Replace `your-domain.com` with your actual domain name
-- Make sure the password in `DATABASE_URL` matches `POSTGRES_PASSWORD`
-- The database host in `DATABASE_URL` must be `postgres` (the Docker service name), not `localhost`
+**IMPORTANT**:
+- Replace `YOUR_SECURE_PASSWORD_HERE` with a strong password
+- Replace `YOUR_ADMIN_PASSWORD_HERE` with admin panel password
+- Replace `YOUR-USERNAME` with your GitHub username
+- Use `postgres` as the database host (NOT `localhost`)
 
-### 3. Set Proper Permissions
+Save and exit (Ctrl+O, Enter, Ctrl+X).
+
+### 2.3 Verify `.env` File
 
 ```bash
-# Ensure .env file is not world-readable
-chmod 600 .env
-
-# Create uploads directory if it doesn't exist
-mkdir -p public/uploads/products public/uploads/pricelists public/uploads/partners
+cat .env
 ```
+
+Ensure all variables are set correctly.
 
 ---
 
-## Running Database Migrations
+## Part 3: GitHub Container Registry Authentication
 
-Before starting the application, you need to set up the database schema.
+### 3.1 Create GitHub Personal Access Token
 
-### Option 1: Run Migrations from Host (Recommended)
+1. Go to GitHub: Settings → Developer settings → Personal access tokens → Tokens (classic)
+2. Click "Generate new token (classic)"
+3. Give it a name: "VPS Docker Pull"
+4. Select scopes: `read:packages`
+5. Generate and copy the token
 
-If you have Node.js and pnpm installed on the host:
-
-```bash
-# Install dependencies
-pnpm install
-
-# Generate Prisma Client
-pnpm prisma generate
-
-# Run migrations
-pnpm prisma migrate deploy
-```
-
-### Option 2: Run Migrations Inside Container
-
-If you prefer to run migrations from within Docker:
+### 3.2 Login to GHCR from VPS
 
 ```bash
-# Start only the database
-docker compose up -d postgres
-
-# Wait for database to be ready (about 10-15 seconds)
-sleep 15
-
-# Run migrations using a temporary container
-docker compose run --rm app sh -c "pnpm prisma migrate deploy"
+echo "YOUR_GITHUB_TOKEN" | docker login ghcr.io -u YOUR-USERNAME --password-stdin
 ```
 
-### Create Admin User
+Replace:
+- `YOUR_GITHUB_TOKEN` with the token from step 3.1
+- `YOUR-USERNAME` with your GitHub username
 
-After migrations, you need to create an admin user to access the admin panel. You can do this by:
-
-1. Using Prisma Studio:
-```bash
-pnpm prisma studio
-```
-
-2. Or by running a seed script (if you have one):
-```bash
-pnpm prisma db seed
-```
-
-3. Or by creating a user directly through your application's sign-up flow.
+Successful login shows: `Login Succeeded`
 
 ---
 
-## Starting the Application
+## Part 4: First Deployment
 
-### 1. Build and Start All Services
+### 4.1 Pull Docker Images
 
 ```bash
-# Build and start all services (app, postgres, nginx)
-docker compose up -d --build
-
-# This command will:
-# - Build the Next.js application
-# - Start PostgreSQL database
-# - Start the Next.js app
-# - Start Nginx reverse proxy
+cd /opt/packplanet
+docker compose pull
 ```
 
-### 2. Verify Services Are Running
+This downloads the pre-built image from GHCR.
+
+### 4.2 Start Services
 
 ```bash
-# Check running containers
+docker compose up -d
+```
+
+This starts:
+- PostgreSQL database
+- Next.js application
+- Nginx reverse proxy
+
+### 4.3 Check Container Status
+
+```bash
 docker compose ps
-
-# You should see three containers running:
-# - packplanet-db (postgres)
-# - packplanet-app (Next.js)
-# - packplanet-nginx (nginx)
 ```
 
-### 3. Check Application Health
+All services should show "Up" status.
+
+### 4.4 Run Database Migrations
 
 ```bash
-# Check logs to ensure no errors
+docker compose exec app pnpm prisma migrate deploy
+```
+
+This applies all database migrations.
+
+### 4.5 (Optional) Seed Database
+
+If you have a seed script:
+
+```bash
+docker compose exec app pnpm prisma db seed
+```
+
+### 4.6 Verify Deployment
+
+```bash
+# Check logs
 docker compose logs app
 
-# Test the application
-curl http://localhost
+# Check if app is responding
+curl http://localhost:80
 ```
 
-The application should now be accessible at:
-- **HTTP:** `http://your-server-ip` or `http://your-domain.com`
-- **Admin Panel:** `http://your-domain.com/admin`
+Visit your VPS IP in a browser: `http://your-vps-ip`
 
 ---
 
-## Updating the Application
+## Part 5: Continuous Deployment (Updates)
 
-When you need to deploy updates:
+### 5.1 How It Works
 
-### 1. Pull Latest Changes
+1. You push code to `main` branch
+2. GitHub Actions builds new Docker image
+3. Image is pushed to GHCR with tags: `latest` and commit SHA
+4. You pull and restart containers on VPS
+
+### 5.2 Update Deployment
 
 ```bash
-cd /home/packplanet/packplanet
-git pull origin main
+cd /opt/packplanet
+
+# Pull latest image
+docker compose pull
+
+# Restart containers with new image
+docker compose up -d
+
+# Run migrations if schema changed
+docker compose exec app pnpm prisma migrate deploy
 ```
 
-### 2. Rebuild and Restart
+### 5.3 Verify Update
 
 ```bash
-# Stop current containers
-docker compose down
+# Check container is using new image
+docker compose ps
 
-# Rebuild with new changes
-docker compose up -d --build
+# View logs
+docker compose logs -f app
 ```
 
-### 3. Run New Migrations (if any)
+---
+
+## Part 6: Monitoring and Maintenance
+
+### 6.1 View Logs
 
 ```bash
-# Check if there are new migrations
-docker compose run --rm app sh -c "pnpm prisma migrate deploy"
+# All services
+docker compose logs
+
+# Specific service
+docker compose logs app
+docker compose logs postgres
+docker compose logs nginx
+
+# Follow logs (real-time)
+docker compose logs -f app
 ```
 
-### Quick Update Script
-
-You can create a deployment script for easier updates:
+### 6.2 Check Resource Usage
 
 ```bash
-cat > deploy.sh << 'EOF'
+# Container stats
+docker stats
+
+# Disk usage
+docker system df
+```
+
+### 6.3 Check Service Health
+
+```bash
+# Container status
+docker compose ps
+
+# PostgreSQL health
+docker compose exec postgres pg_isready -U packplanet_user
+
+# Application health
+curl http://localhost/health
+```
+
+### 6.4 Restart Services
+
+```bash
+# Restart all
+docker compose restart
+
+# Restart specific service
+docker compose restart app
+```
+
+---
+
+## Part 7: Troubleshooting
+
+### 7.1 Application Won't Start
+
+```bash
+# Check logs
+docker compose logs app
+
+# Common issues:
+# - DATABASE_URL incorrect → verify .env
+# - Migrations not run → run prisma migrate deploy
+# - Out of memory → check docker stats
+```
+
+### 7.2 Database Connection Failed
+
+```bash
+# Verify postgres is running
+docker compose ps postgres
+
+# Check DATABASE_URL in .env
+# Must use 'postgres' as host, NOT 'localhost'
+
+# Test connection
+docker compose exec postgres psql -U packplanet_user -d packplanet
+```
+
+### 7.3 Nginx 502 Bad Gateway
+
+```bash
+# Check if app is running
+docker compose ps app
+
+# Check app logs
+docker compose logs app
+
+# Verify nginx can reach app
+docker compose exec nginx ping app
+```
+
+### 7.4 Out of Memory
+
+```bash
+# Check memory usage
+docker stats
+
+# If containers are killed due to OOM:
+# - Reduce memory limits in docker-compose.yml
+# - Disable unnecessary features
+# - Restart containers
+docker compose restart
+```
+
+### 7.5 Pull Image Fails (Authentication)
+
+```bash
+# Re-login to GHCR
+echo "YOUR_GITHUB_TOKEN" | docker login ghcr.io -u YOUR-USERNAME --password-stdin
+
+# Verify repository name in .env matches GitHub
+cat .env | grep GITHUB_REPOSITORY
+```
+
+---
+
+## Part 8: Rollback
+
+### 8.1 Rollback to Previous Version
+
+GitHub Actions tags images with commit SHA. To rollback:
+
+```bash
+# List available images
+docker images | grep packplanet
+
+# Update docker-compose.yml to use specific tag
+# Edit the app service image line:
+# image: ghcr.io/YOUR-USERNAME/packplanet:main-abc1234
+
+# Pull specific version
+docker compose pull
+
+# Restart
+docker compose up -d
+```
+
+### 8.2 Rollback Database Migration
+
+```bash
+# Not recommended in production
+# Better approach: Create a new migration to undo changes
+
+# If absolutely necessary:
+docker compose exec app pnpm prisma migrate resolve --rolled-back "MIGRATION_NAME"
+```
+
+---
+
+## Part 9: Backup and Restore
+
+### 9.1 Backup Database
+
+```bash
+# Create backup directory
+mkdir -p /opt/backups
+
+# Backup PostgreSQL
+docker compose exec postgres pg_dump -U packplanet_user packplanet > /opt/backups/backup-$(date +%Y%m%d-%H%M%S).sql
+```
+
+### 9.2 Backup Uploads
+
+```bash
+# Uploads are in Docker volume
+docker run --rm -v packplanet_uploads:/data -v /opt/backups:/backup alpine tar czf /backup/uploads-$(date +%Y%m%d-%H%M%S).tar.gz -C /data .
+```
+
+### 9.3 Restore Database
+
+```bash
+# Stop app to prevent connections
+docker compose stop app
+
+# Restore
+docker compose exec -T postgres psql -U packplanet_user packplanet < /opt/backups/backup-YYYYMMDD-HHMMSS.sql
+
+# Start app
+docker compose start app
+```
+
+### 9.4 Restore Uploads
+
+```bash
+docker run --rm -v packplanet_uploads:/data -v /opt/backups:/backup alpine tar xzf /backup/uploads-YYYYMMDD-HHMMSS.tar.gz -C /data
+```
+
+---
+
+## Part 10: Security Hardening
+
+### 10.1 Firewall Configuration
+
+```bash
+# Install UFW (if not installed)
+apt install ufw
+
+# Allow SSH
+ufw allow 22/tcp
+
+# Allow HTTP
+ufw allow 80/tcp
+
+# Allow HTTPS (if using SSL)
+ufw allow 443/tcp
+
+# Enable firewall
+ufw enable
+```
+
+### 10.2 Enable HTTPS with Let's Encrypt (Optional)
+
+```bash
+# Install certbot
+apt install certbot python3-certbot-nginx
+
+# Get certificate
+certbot --nginx -d your-domain.com
+
+# Auto-renewal is configured automatically
+certbot renew --dry-run
+```
+
+### 10.3 Regular Updates
+
+```bash
+# Update system packages
+apt update && apt upgrade -y
+
+# Update Docker images
+cd /opt/packplanet
+docker compose pull
+docker compose up -d
+```
+
+---
+
+## Part 11: Environment Variables Reference
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `POSTGRES_DB` | PostgreSQL database name | `packplanet` |
+| `POSTGRES_USER` | PostgreSQL username | `packplanet_user` |
+| `POSTGRES_PASSWORD` | PostgreSQL password | `secure_password_123` |
+| `DATABASE_URL` | Prisma connection string | `postgres://user:pass@postgres:5432/db` |
+| `ADMIN_USERNAME` | Admin panel username | `admin` |
+| `ADMIN_PASSWORD` | Admin panel password | `admin_password_123` |
+| `GITHUB_REPOSITORY` | GitHub repo (user/repo) | `username/packplanet` |
+| `NODE_ENV` | Node environment | `production` |
+
+**Critical Note**: In `DATABASE_URL`, the hostname MUST be `postgres` (the Docker Compose service name), NOT `localhost` or `127.0.0.1`.
+
+---
+
+## Part 12: Automated Deployment Script
+
+Create a deployment script for easier updates:
+
+```bash
+nano /opt/packplanet/deploy.sh
+```
+
+Content:
+
+```bash
 #!/bin/bash
 set -e
 
 echo "🚀 Starting deployment..."
 
-# Pull latest changes
-echo "📥 Pulling latest changes..."
-git pull origin main
+cd /opt/packplanet
 
-# Stop containers
-echo "🛑 Stopping containers..."
-docker compose down
+echo "📥 Pulling latest images..."
+docker compose pull
 
-# Rebuild and start
-echo "🔨 Building and starting containers..."
-docker compose up -d --build
-
-# Run migrations
-echo "🗄️  Running database migrations..."
-docker compose run --rm app sh -c "pnpm prisma migrate deploy"
-
-# Show status
-echo "✅ Deployment complete!"
-docker compose ps
-
-echo "📋 Application logs:"
-docker compose logs --tail=50 app
-EOF
-
-chmod +x deploy.sh
-```
-
-Then deploy updates with:
-```bash
-./deploy.sh
-```
-
----
-
-## Monitoring and Logs
-
-### View Logs
-
-```bash
-# View all logs
-docker compose logs
-
-# View logs for specific service
-docker compose logs app
-docker compose logs postgres
-docker compose logs nginx
-
-# Follow logs in real-time
-docker compose logs -f app
-
-# View last 100 lines
-docker compose logs --tail=100 app
-```
-
-### Check Container Status
-
-```bash
-# List running containers
-docker compose ps
-
-# View resource usage
-docker stats
-```
-
-### Check Disk Space
-
-```bash
-# Check disk usage
-df -h
-
-# Check Docker disk usage
-docker system df
-```
-
-### Clean Up Docker Resources
-
-```bash
-# Remove unused images
-docker image prune -a
-
-# Remove unused volumes (⚠️ be careful with this)
-docker volume prune
-
-# Full cleanup (⚠️ be very careful)
-docker system prune -a --volumes
-```
-
----
-
-## SSL/HTTPS Configuration
-
-### Using Let's Encrypt (Recommended)
-
-#### 1. Install Certbot
-
-```bash
-sudo apt install -y certbot
-```
-
-#### 2. Stop Nginx Temporarily
-
-```bash
-docker compose stop nginx
-```
-
-#### 3. Obtain SSL Certificate
-
-```bash
-sudo certbot certonly --standalone -d your-domain.com -d www.your-domain.com
-```
-
-#### 4. Create SSL Directory
-
-```bash
-mkdir -p nginx/ssl
-sudo cp /etc/letsencrypt/live/your-domain.com/fullchain.pem nginx/ssl/
-sudo cp /etc/letsencrypt/live/your-domain.com/privkey.pem nginx/ssl/
-sudo chown -R $USER:$USER nginx/ssl/
-```
-
-#### 5. Update nginx.conf
-
-Uncomment the HTTPS server block in `nginx/nginx.conf` and update:
-- Replace `your-domain.com` with your actual domain
-- Uncomment the HTTP to HTTPS redirect
-
-#### 6. Update docker-compose.yml
-
-Add SSL volume mount to nginx service:
-
-```yaml
-nginx:
-  volumes:
-    - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-    - uploads:/var/www/uploads:ro
-    - ./nginx/ssl:/etc/nginx/ssl:ro  # Add this line
-  ports:
-    - "80:80"
-    - "443:443"  # Uncomment this line
-```
-
-#### 7. Restart Nginx
-
-```bash
-docker compose up -d nginx
-```
-
-#### 8. Set Up Auto-Renewal
-
-```bash
-# Test renewal
-sudo certbot renew --dry-run
-
-# Add cron job for auto-renewal
-sudo crontab -e
-
-# Add this line to renew certificates twice daily:
-0 0,12 * * * certbot renew --quiet --deploy-hook "cd /home/packplanet/packplanet && cp /etc/letsencrypt/live/your-domain.com/*.pem nginx/ssl/ && docker compose restart nginx"
-```
-
----
-
-## Troubleshooting
-
-### Application Won't Start
-
-**Check logs:**
-```bash
-docker compose logs app
-```
-
-**Common issues:**
-- Database not ready: Wait a few seconds and check `docker compose logs postgres`
-- Environment variables missing: Verify `.env` file exists and has correct values
-- Port conflicts: Ensure port 80 is not used by another service
-
-### Database Connection Errors
-
-**Verify DATABASE_URL format:**
-```
-postgresql://postgres:password@postgres:5432/packplanet?schema=public
-```
-
-**Important:**
-- Host must be `postgres` (Docker service name), NOT `localhost`
-- Password must match `POSTGRES_PASSWORD` in `.env`
-
-**Test database connection:**
-```bash
-docker compose exec postgres psql -U postgres -d packplanet -c "SELECT 1;"
-```
-
-### Nginx 502 Bad Gateway
-
-**Possible causes:**
-- Next.js app not running: Check `docker compose ps`
-- App container restarting: Check `docker compose logs app`
-- Wrong upstream: Verify `app:3000` in nginx.conf
-
-### Prisma Migration Issues
-
-**Reset database (⚠️ destructive - only for development):**
-```bash
-docker compose run --rm app sh -c "pnpm prisma migrate reset --force"
-```
-
-**Check migration status:**
-```bash
-docker compose run --rm app sh -c "pnpm prisma migrate status"
-```
-
-### Out of Disk Space
-
-```bash
-# Check disk usage
-df -h
-
-# Clean up Docker
-docker system prune -a
-docker volume ls -qf dangling=true | xargs docker volume rm
-
-# Clean up logs
-sudo truncate -s 0 /var/lib/docker/containers/*/*-json.log
-```
-
-### Container Keeps Restarting
-
-```bash
-# Check logs
-docker compose logs --tail=100 app
-
-# Check if it's a dependency issue
-docker compose up postgres
-# Wait for it to be healthy, then:
-docker compose up app
-```
-
-### Permission Issues with Uploads
-
-```bash
-# Fix permissions
-docker compose exec app chown -R nextjs:nodejs /app/public/uploads
-```
-
-### How to Access PostgreSQL Directly
-
-```bash
-# Connect to database
-docker compose exec postgres psql -U postgres -d packplanet
-
-# Or from your local machine (if you expose postgres port)
-# Add to docker-compose.yml under postgres service:
-#   ports:
-#     - "5432:5432"
-# Then: psql -h your-server-ip -U postgres -d packplanet
-```
-
----
-
-## Performance Optimization
-
-### Enable Nginx Caching
-
-Add to nginx.conf http block:
-
-```nginx
-proxy_cache_path /var/cache/nginx levels=1:2 keys_zone=my_cache:10m max_size=1g inactive=60m use_temp_path=off;
-```
-
-### Limit Logs Size
-
-Add to docker-compose.yml:
-
-```yaml
-services:
-  app:
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
-```
-
-### Monitor Resource Usage
-
-```bash
-# Install htop
-sudo apt install htop
-
-# Monitor in real-time
-htop
-
-# Check Docker stats
-docker stats
-```
-
----
-
-## Backup Strategy
-
-### Database Backups
-
-Create a backup script:
-
-```bash
-cat > backup.sh << 'EOF'
-#!/bin/bash
-BACKUP_DIR="/home/packplanet/backups"
-mkdir -p $BACKUP_DIR
-DATE=$(date +%Y%m%d_%H%M%S)
-
-docker compose exec -T postgres pg_dump -U postgres packplanet | gzip > $BACKUP_DIR/db_backup_$DATE.sql.gz
-
-# Keep only last 7 days of backups
-find $BACKUP_DIR -name "db_backup_*.sql.gz" -mtime +7 -delete
-
-echo "Backup completed: db_backup_$DATE.sql.gz"
-EOF
-
-chmod +x backup.sh
-```
-
-Set up daily backups:
-```bash
-crontab -e
-# Add: 0 2 * * * /home/packplanet/packplanet/backup.sh
-```
-
-### Uploads Backups
-
-```bash
-# Create uploads backup
-tar -czf uploads_backup_$(date +%Y%m%d).tar.gz public/uploads/
-```
-
----
-
-## Security Checklist
-
-- [ ] Change default PostgreSQL password
-- [ ] Set up SSL/HTTPS
-- [ ] Keep .env file permissions restrictive (600)
-- [ ] Regularly update system packages
-- [ ] Set up firewall (ufw)
-- [ ] Don't expose PostgreSQL port publicly
-- [ ] Set up automated backups
-- [ ] Monitor logs regularly
-- [ ] Use strong admin passwords
-- [ ] Keep Docker and images updated
-
----
-
-## Useful Commands Reference
-
-```bash
-# Start services
+echo "🔄 Restarting services..."
 docker compose up -d
 
-# Stop services
-docker compose down
+echo "🗄️  Running migrations..."
+docker compose exec app pnpm prisma migrate deploy
 
-# Restart services
-docker compose restart
+echo "✅ Deployment complete!"
 
-# View logs
-docker compose logs -f app
-
-# Execute command in container
-docker compose exec app sh
-
-# Rebuild specific service
-docker compose up -d --build app
-
-# Scale services (not applicable for this setup)
-docker compose up -d --scale app=2
-
-# Check service status
+echo "📊 Container status:"
 docker compose ps
+```
 
-# Remove all containers and volumes (⚠️ destructive)
-docker compose down -v
+Make executable:
+
+```bash
+chmod +x /opt/packplanet/deploy.sh
+```
+
+Use it:
+
+```bash
+/opt/packplanet/deploy.sh
 ```
 
 ---
 
-## Support
+## Part 13: Monitoring Setup (Optional)
 
-For issues and questions:
-- Check application logs: `docker compose logs app`
-- Check nginx logs: `docker compose logs nginx`
-- Review this guide's troubleshooting section
-- Check Docker daemon logs: `sudo journalctl -u docker`
+### 13.1 Install Monitoring Tools
+
+```bash
+# Install htop for system monitoring
+apt install htop
+
+# Install docker stats wrapper
+docker stats --no-stream
+```
+
+### 13.2 Log Rotation
+
+Docker handles log rotation by default, but verify:
+
+```bash
+nano /etc/docker/daemon.json
+```
+
+Add:
+
+```json
+{
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "10m",
+    "max-file": "3"
+  }
+}
+```
+
+Restart Docker:
+
+```bash
+systemctl restart docker
+```
 
 ---
 
-**Last Updated:** 2025-12-28
+## Summary
+
+✅ Your application is now deployed!
+
+**Deployment Flow**:
+1. Push to `main` → GitHub Actions builds image
+2. SSH to VPS → `cd /opt/packplanet && ./deploy.sh`
+3. Done!
+
+**Key Files on VPS**:
+- `/opt/packplanet/docker-compose.yml` - Container orchestration
+- `/opt/packplanet/.env` - Environment variables (secrets)
+- `/opt/packplanet/nginx/nginx.conf` - Nginx configuration
+- `/opt/packplanet/deploy.sh` - Deployment script
+
+**Important Commands**:
+- Deploy updates: `./deploy.sh`
+- View logs: `docker compose logs -f app`
+- Restart: `docker compose restart`
+- Check status: `docker compose ps`
+
+**Support**:
+- Documentation: This file
+- Logs: `docker compose logs`
+- GitHub Actions: Check workflow runs for build errors
