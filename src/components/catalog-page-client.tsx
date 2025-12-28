@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useTransition } from "react";
 import type { CatalogContent } from "@/lib/content";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface Product {
   id: string;
@@ -97,7 +98,12 @@ export function CatalogPageClient({
   return (
     <div className="space-y-8">
       {/* Search and Filter Section */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+      >
         <div className="flex-1 sm:max-w-md">
           <SearchInput
             value={searchTerm}
@@ -110,22 +116,40 @@ export function CatalogPageClient({
           onChange={handleCategoryChange}
           categories={categoryOptions}
         />
-      </div>
+      </motion.div>
 
       {/* Results Count */}
-      <div className="text-sm text-muted-foreground">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3, delay: 0.1 }}
+        className="text-sm text-muted-foreground"
+      >
         {content.results.found} <span className="font-semibold">{totalCount}</span>
         {isPending && <span className="ml-2 text-xs">{content.results.updating}</span>}
-      </div>
+      </motion.div>
 
       {/* Products Grid */}
-      <div className={isPending ? "opacity-60 transition-opacity" : ""}>
-        <ProductsGrid products={products} />
-      </div>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={`${searchTerm}-${selectedCategoryId}-${currentPage}`}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: isPending ? 0.6 : 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.3 }}
+        >
+          <ProductsGrid products={products} />
+        </motion.div>
+      </AnimatePresence>
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2 pt-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+          className="flex items-center justify-center gap-2 pt-8"
+        >
           <Button
             variant="outline"
             size="sm"
@@ -179,7 +203,7 @@ export function CatalogPageClient({
             {content.pagination.next}
             <ChevronRight className="h-4 w-4" />
           </Button>
-        </div>
+        </motion.div>
       )}
     </div>
   );

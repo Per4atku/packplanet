@@ -6,6 +6,7 @@ import { getCatalogContent } from "@/lib/content";
 import { Metadata } from "next";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { FadeIn } from "@/components/animations/fade-in";
 
 const content = getCatalogContent();
 
@@ -67,7 +68,9 @@ export default function ProductsPage(props: ProductsPageProps) {
   return (
     <div className="min-h-screen">
       <section className="containerize py-12 md:py-16">
-        <SectionHeading>{content.header.heading}</SectionHeading>
+        <FadeIn>
+          <SectionHeading>{content.header.heading}</SectionHeading>
+        </FadeIn>
 
         <Space size="lg" />
 

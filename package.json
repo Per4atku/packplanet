@@ -37,6 +37,7 @@
     "cmdk": "^1.1.1",
     "dotenv": "^17.2.3",
     "embla-carousel-react": "^8.6.0",
+    "framer-motion": "^12.23.26",
     "lucia": "^3.2.2",
     "lucide-react": "^0.562.0",
     "next": "16.1.1",
