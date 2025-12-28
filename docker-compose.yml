@@ -7,15 +7,15 @@ services:
     container_name: packplanet-db
     restart: unless-stopped
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: packplanet
-    ports:
-      - "5432:5432"
+      POSTGRES_DB: ${POSTGRES_DB:-packplanet}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - packplanet-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-packplanet}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -27,19 +27,53 @@ services:
       dockerfile: Dockerfile
     container_name: packplanet-app
     restart: unless-stopped
-    ports:
-      - "3000:3000"
-    environment:
-      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/packplanet?schema=public
-      - NODE_ENV=production
-      - NEXT_TELEMETRY_DISABLED=1
     depends_on:
       postgres:
         condition: service_healthy
-    # Optional: Volume mounts for development
-    # volumes:
-    #   - ./public/uploads:/app/public/uploads
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      NODE_ENV: production
+      NEXT_TELEMETRY_DISABLED: 1
+      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL}
+      PORT: 3000
+    volumes:
+      # Persist uploaded files (product images, price lists, partner logos)
+      - uploads:/app/public/uploads
+    networks:
+      - packplanet-network
+    # Only expose port internally to nginx, not to host
+    expose:
+      - "3000"
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: packplanet-nginx
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      # Expose HTTP on port 80
+      - "80:80"
+      # Optionally expose HTTPS on port 443 (configure SSL certificates separately)
+      # - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      # Share uploads volume for serving static files efficiently
+      - uploads:/var/www/uploads:ro
+      # Uncomment below for SSL certificates
+      # - ./nginx/ssl:/etc/nginx/ssl:ro
+    networks:
+      - packplanet-network
 
 volumes:
+  # Persistent database storage
   postgres_data:
     driver: local
+  # Persistent uploads storage
+  uploads:
+    driver: local
+
+networks:
+  packplanet-network:
+    driver: bridge
