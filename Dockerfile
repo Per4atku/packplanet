@@ -60,6 +60,7 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
 
 # Copy Next.js build output
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
@@ -67,6 +68,9 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 # Copy Prisma generated client
 COPY --from=builder --chown=nextjs:nodejs /app/src/generated ./src/generated
+
+# Copy node_modules for Prisma CLI (needed for migrations)
+COPY --from=deps /app/node_modules ./node_modules
 
 # Create uploads directory with correct permissions
 RUN mkdir -p /app/uploads && chown nextjs:nodejs /app/uploads

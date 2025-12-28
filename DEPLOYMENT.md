@@ -205,6 +205,8 @@ docker compose exec app pnpm prisma migrate deploy
 
 This applies all database migrations.
 
+**Note for Prisma 7**: The migrations use `prisma.config.ts` which reads `DATABASE_URL` from the environment. Ensure your `.env` file is properly configured before running migrations.
+
 ### 4.5 (Optional) Seed Database
 
 If you have a seed script:
