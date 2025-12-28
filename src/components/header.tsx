@@ -7,8 +7,8 @@ export function Header() {
   return (
     <HeaderAnimated
       siteName={content.site.name}
-      siteShortName={content.site.shortName}
-      phone={content.header.phone}
+      siteShortName={"Планета Упаковки"}
+      phone={"8 (800) 234-78-75"}
       nav={content.header.nav}
     />
   );

@@ -2,7 +2,7 @@ import { getProductById, getLinkedProducts } from "@/lib/queries/products";
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Flame, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/product-card";
 import { SectionHeading } from "@/components/section-heading";
@@ -101,15 +101,32 @@ export default async function ProductPage({ params }: ProductPageProps) {
         {/* Product Details */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           {/* Left Column: Product Media */}
-          <div>
+          <div className="relative">
+            {/* Product Badges */}
+            <div className="absolute top-4 left-4 z-50 flex flex-col gap-2">
+              {product.heatProduct && (
+                <div className="inline-flex items-center gap-2 rounded-full bg-orange-500 px-3 py-1.5 shadow-lg">
+                  <Flame className="h-4 w-4 text-white" />
+                  <span className="text-sm font-medium text-white">Популярный Товар</span>
+                </div>
+              )}
+              {product.wholesalePrice && product.wholesaleAmount && (
+                <div className="inline-flex items-center gap-2 rounded-full bg-primary px-3 py-1.5 shadow-lg">
+                  <ShoppingCart className="h-4 w-4 text-white" />
+                  <span className="text-sm font-medium text-white">
+                    Оптовая Цена: {product.wholesalePrice} руб от {product.wholesaleAmount} {product.unit}
+                  </span>
+                </div>
+              )}
+            </div>
             <ProductMedia
               images={product.images}
               productName={product.name}
             />
           </div>
 
-          {/* Right Column: Decision Zone (Sticky on desktop) */}
-          <div>
+          {/* Right Column: Decision Zone, Characteristics & Description */}
+          <div className="space-y-8">
             <ProductDecisionZone
               product={{
                 sku: product.sku,
@@ -122,17 +139,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 isHot: product.heatProduct,
               }}
             />
-          </div>
-        </div>
 
-        {/* Secondary Information */}
-        <div className="mt-16 max-w-3xl">
-          <ProductCharacteristics
-            sku={product.sku}
-            categoryName={product.category.name}
-            unit={product.unit}
-            description={product.description}
-          />
+            <ProductCharacteristics
+              sku={product.sku}
+              categoryName={product.category.name}
+              unit={product.unit}
+              description={product.description}
+            />
+          </div>
         </div>
 
         {/* Related Products Section */}

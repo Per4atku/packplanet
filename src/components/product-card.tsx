@@ -127,12 +127,6 @@ export function ProductCard({
 
           <h3 className="mb-2 text-center text-lg font-semibold">{name}</h3>
 
-          {description && (
-            <p className="mb-3 text-center text-sm text-muted-foreground">
-              {description}
-            </p>
-          )}
-
           <div className="text-center">
             <p className="text-2xl font-bold text-foreground">
               {price}
@@ -144,8 +138,11 @@ export function ProductCard({
               <p className="text-xs text-muted-foreground">{priceNote}</p>
             )}
             {wholesalePrice && wholesaleAmount && (
-              <p className="mt-2 text-xs text-muted-foreground">
-                Опт: {wholesaleAmount}+ шт - {wholesalePrice} руб
+              <p className="mt-2 text-sm text-muted-foreground">
+                Опт: {wholesaleAmount}+ {unit} —{" "}
+                <span className="font-bold">
+                  {wholesalePrice}руб/{unit}
+                </span>{" "}
               </p>
             )}
           </div>

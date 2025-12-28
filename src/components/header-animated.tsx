@@ -12,7 +12,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface HeaderAnimatedProps {
   siteName: string;
@@ -106,7 +107,7 @@ export function HeaderAnimated({
         <div className="flex items-center gap-3">
           {/* Phone Link - visible on all screens */}
           <motion.a
-            href="tel:+78002347876"
+            href="tel:+78002347875"
             className="flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-primary"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
@@ -132,28 +133,28 @@ export function HeaderAnimated({
               <nav className="flex flex-col gap-1">
                 <Link
                   href="/products"
-                  className="text-base font-medium text-foreground hover:text-primary transition-colors py-4 px-4 rounded-lg hover:bg-accent active:bg-accent/80"
+                  className="text-base font-medium text-foreground hover:text-primary transition-colors py-2 px-4 rounded-lg hover:bg-accent hover:text-white active:bg-accent/80"
                   onClick={() => setIsOpen(false)}
                 >
                   {nav.catalog}
                 </Link>
                 <Link
                   href="/#price-list"
-                  className="text-base font-medium text-foreground hover:text-primary transition-colors py-4 px-4 rounded-lg hover:bg-accent active:bg-accent/80"
+                  className="text-base font-medium text-foreground transition-colors py-2 px-4 rounded-lg hover:bg-accent hover:text-white active:bg-accent/80"
                   onClick={() => setIsOpen(false)}
                 >
                   {nav.priceList}
                 </Link>
                 <Link
                   href="/#delivery"
-                  className="text-base font-medium text-foreground hover:text-primary transition-colors py-4 px-4 rounded-lg hover:bg-accent active:bg-accent/80"
+                  className="text-base font-medium text-foreground  transition-colors py-2 px-4 rounded-lg hover:bg-accent hover:text-white active:bg-accent/80"
                   onClick={() => setIsOpen(false)}
                 >
                   {nav.delivery}
                 </Link>
                 <Link
                   href="/#contacts"
-                  className="text-base font-medium text-foreground hover:text-primary transition-colors py-4 px-4 rounded-lg hover:bg-accent active:bg-accent/80"
+                  className="text-base font-medium text-foreground  transition-colors py-2 px-4 rounded-lg hover:bg-accent hover:text-white active:bg-accent/80"
                   onClick={() => setIsOpen(false)}
                 >
                   {nav.contacts}
@@ -162,7 +163,7 @@ export function HeaderAnimated({
               <div className="mt-auto pt-8 border-t">
                 <a
                   href="tel:+78002347876"
-                  className="flex items-center gap-3 text-base font-semibold text-foreground hover:text-primary transition-colors py-4 px-4 rounded-lg hover:bg-accent active:bg-accent/80"
+                  className="flex items-center gap-3 text-base font-semibold text-foreground  transition-colors py-4 px-4 rounded-lg active:bg-accent/80"
                 >
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
                     <Phone className="h-5 w-5 text-primary" />

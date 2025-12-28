@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { Prisma } from "@/generated/prisma/client";
 import { cache } from "react";
+import { scoreProduct } from "@/lib/fuzzy-search";
 
 export interface GetProductsParams {
   page?: number;
@@ -17,7 +18,7 @@ export interface PaginatedProducts {
 }
 
 /**
- * Fetch products with pagination, filtering, and search
+ * Fetch products with pagination, filtering, and fuzzy search
  * Cached per unique parameter combination for performance
  */
 export const getProducts = cache(async (params: GetProductsParams = {}) => {
@@ -31,14 +32,48 @@ export const getProducts = cache(async (params: GetProductsParams = {}) => {
     where.categoryId = categoryId;
   }
 
-  if (search) {
-    where.OR = [
-      { name: { contains: search, mode: "insensitive" } },
-      { sku: { contains: search, mode: "insensitive" } },
-    ];
+  // If search is provided, use fuzzy matching
+  if (search && search.trim()) {
+    // Fetch all products matching the category filter (without pagination)
+    // We need to score all products before pagination
+    const allProducts = await prisma.product.findMany({
+      where: categoryId ? { categoryId } : {},
+      include: {
+        category: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    // Score each product using fuzzy matching
+    const scoredProducts = allProducts
+      .map((product) => ({
+        product,
+        score: scoreProduct(
+          { name: product.name, sku: product.sku || "" },
+          search
+        ),
+      }))
+      .filter((item) => item.score > 0.3) // Only keep matches above threshold
+      .sort((a, b) => b.score - a.score); // Sort by score (best matches first)
+
+    // Apply pagination to scored results
+    const paginatedProducts = scoredProducts.slice(skip, skip + limit);
+    const totalCount = scoredProducts.length;
+    const totalPages = Math.ceil(totalCount / limit);
+
+    return {
+      products: paginatedProducts.map((item) => item.product),
+      totalCount,
+      totalPages,
+      currentPage: page,
+    };
   }
 
-  // Fetch products and total count in parallel
+  // No search - use standard database query
   const [products, totalCount] = await Promise.all([
     prisma.product.findMany({
       where,

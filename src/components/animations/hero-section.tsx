@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ReactNode } from "react";
+import Image from "next/image";
 
 interface HeroSectionProps {
   children: ReactNode;
@@ -20,9 +21,24 @@ export function HeroSection({ children }: HeroSectionProps) {
           },
         },
       }}
-      className="containerize h-screen flex items-center py-16 md:py-24 lg:py-32"
+      className="relative w-full h-screen flex items-center py-16 md:py-24 lg:py-32"
     >
-      {children}
+      {/* Background Image - Full Width */}
+      <div className="absolute inset-0 -z-10 overflow-hidden">
+        <Image
+          src="/vladivostok.avif"
+          alt="Vladivostok background"
+          fill
+          className="object-cover opacity-10"
+          priority
+          quality={90}
+        />
+        {/* Gradient overlay - white at top, transparent at bottom */}
+        <div className="absolute inset-0 bg-gradient-to-b from-white via-white/5 to-transparent" />
+      </div>
+
+      {/* Content - Containerized */}
+      <div className="containerize relative z-10 w-full">{children}</div>
     </motion.section>
   );
 }

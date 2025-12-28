@@ -13,7 +13,13 @@ const content = getCatalogContent();
 export const metadata: Metadata = {
   title: content.page.title,
   description: content.page.description,
-  keywords: ["каталог упаковки", "одноразовая посуда", "пищевая упаковка", "купить упаковку", "каталог товаров"],
+  keywords: [
+    "каталог упаковки",
+    "одноразовая посуда",
+    "пищевая упаковка",
+    "купить упаковку",
+    "каталог товаров",
+  ],
   openGraph: {
     type: "website",
     title: content.page.title,
@@ -92,11 +98,7 @@ export default function ProductsPage(props: ProductsPageProps) {
   return (
     <main className="min-h-screen">
       <section className="containerize py-12 md:py-16">
-        <FadeIn>
-          <SectionHeading>{content.header.heading}</SectionHeading>
-        </FadeIn>
-
-        <Space size="lg" />
+        <Space size="sm" />
 
         <Suspense fallback={<CatalogSkeleton />}>
           <CatalogContent searchParams={props.searchParams} />
