@@ -33,7 +33,8 @@ export async function createPartner(formData: FormData) {
     const bytes = await imageFile.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    const uploadDir = join(process.cwd(), "public/uploads/partners");
+    // Use the uploads directory that's mounted as a volume
+    const uploadDir = join(process.cwd(), "uploads/partners");
     await mkdir(uploadDir, { recursive: true });
 
     const filename = `${Date.now()}-${imageFile.name}`;
@@ -76,7 +77,9 @@ export async function updatePartner(id: string, formData: FormData) {
     // Delete old image if exists
     if (partner?.image) {
       try {
-        const filepath = join(process.cwd(), "public", partner.image);
+        // Remove leading slash and use uploads directory
+        const relativePath = partner.image.startsWith('/') ? partner.image.substring(1) : partner.image;
+        const filepath = join(process.cwd(), relativePath);
         await unlink(filepath);
       } catch (error) {
         console.error("Failed to delete old image:", error);
@@ -87,7 +90,8 @@ export async function updatePartner(id: string, formData: FormData) {
     const bytes = await imageFile.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    const uploadDir = join(process.cwd(), "public/uploads/partners");
+    // Use the uploads directory that's mounted as a volume
+    const uploadDir = join(process.cwd(), "uploads/partners");
     await mkdir(uploadDir, { recursive: true });
 
     const filename = `${Date.now()}-${imageFile.name}`;
@@ -125,7 +129,9 @@ export async function deletePartner(id: string) {
     // Delete image from filesystem
     if (partner.image) {
       try {
-        const filepath = join(process.cwd(), "public", partner.image);
+        // Remove leading slash and use uploads directory
+        const relativePath = partner.image.startsWith('/') ? partner.image.substring(1) : partner.image;
+        const filepath = join(process.cwd(), relativePath);
         await unlink(filepath);
       } catch (error) {
         console.error("Failed to delete image:", error);

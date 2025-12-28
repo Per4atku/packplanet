@@ -51,7 +51,7 @@ export function HeaderAnimated({
           >
             <Image src={"/logo.png"} width={500} height={500} alt="" />
           </motion.div>
-          <span className="hidden font-bold text-foreground sm:inline-block group-hover:text-primary transition-colors">
+          <span className=" font-bold text-foreground sm:inline-block group-hover:text-primary transition-colors">
             {siteName}
           </span>
         </Link>

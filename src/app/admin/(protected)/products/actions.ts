@@ -44,7 +44,8 @@ export async function createProduct(formData: FormData) {
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
 
-      const uploadDir = join(process.cwd(), "public/uploads/products");
+      // Use the uploads directory that's mounted as a volume
+      const uploadDir = join(process.cwd(), "uploads/products");
       await mkdir(uploadDir, { recursive: true });
 
       const filename = `${Date.now()}-${file.name}`;
@@ -109,7 +110,8 @@ export async function updateProduct(id: string, formData: FormData) {
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
 
-      const uploadDir = join(process.cwd(), "public/uploads/products");
+      // Use the uploads directory that's mounted as a volume
+      const uploadDir = join(process.cwd(), "uploads/products");
       await mkdir(uploadDir, { recursive: true });
 
       const filename = `${Date.now()}-${file.name}`;
@@ -156,7 +158,9 @@ export async function deleteProduct(id: string) {
     // Delete images from filesystem
     for (const imagePath of product.images) {
       try {
-        const filepath = join(process.cwd(), "public", imagePath);
+        // Remove leading slash and use uploads directory
+        const relativePath = imagePath.startsWith('/') ? imagePath.substring(1) : imagePath;
+        const filepath = join(process.cwd(), relativePath);
         await unlink(filepath);
       } catch (error) {
         console.error(`Failed to delete image: ${imagePath}`, error);
@@ -186,7 +190,9 @@ export async function removeProductImage(productId: string, imagePath: string) {
 
     // Delete image from filesystem
     try {
-      const filepath = join(process.cwd(), "public", imagePath);
+      // Remove leading slash and use uploads directory
+      const relativePath = imagePath.startsWith('/') ? imagePath.substring(1) : imagePath;
+      const filepath = join(process.cwd(), relativePath);
       await unlink(filepath);
     } catch (error) {
       console.error(`Failed to delete image: ${imagePath}`, error);
