@@ -9,6 +9,8 @@ VERSION="${1:-latest}"
 echo "🔨 Building Docker image for linux/amd64..."
 docker buildx build \
   --platform linux/amd64 \
+  --provenance=false \
+  --sbom=false \
   -t $DOCKER_USERNAME/$IMAGE_NAME:$VERSION \
   --push \
   .
