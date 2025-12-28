@@ -6,17 +6,12 @@ DOCKER_USERNAME="${DOCKER_USERNAME:-artcchi}"
 IMAGE_NAME="packplanet"
 VERSION="${1:-latest}"
 
-echo "🔨 Building Docker image..."
-docker build -t $DOCKER_USERNAME/$IMAGE_NAME:$VERSION .
-
-echo "📤 Pushing to Docker Hub..."
-docker push $DOCKER_USERNAME/$IMAGE_NAME:$VERSION
-
-if [ "$VERSION" != "latest" ]; then
-    echo "🏷️  Tagging as latest..."
-    docker tag $DOCKER_USERNAME/$IMAGE_NAME:$VERSION $DOCKER_USERNAME/$IMAGE_NAME:latest
-    docker push $DOCKER_USERNAME/$IMAGE_NAME:latest
-fi
+echo "🔨 Building Docker image for linux/amd64..."
+docker buildx build \
+  --platform linux/amd64 \
+  -t $DOCKER_USERNAME/$IMAGE_NAME:$VERSION \
+  --push \
+  .
 
 echo "✅ Done! Image: $DOCKER_USERNAME/$IMAGE_NAME:$VERSION"
 echo ""
