@@ -72,8 +72,9 @@ COPY --from=builder --chown=nextjs:nodejs /app/src/generated ./src/generated
 # Copy node_modules for Prisma CLI (needed for migrations)
 COPY --from=deps /app/node_modules ./node_modules
 
-# Create uploads directory with correct permissions
-RUN mkdir -p /app/uploads && chown nextjs:nodejs /app/uploads
+# Create uploads directories with correct permissions
+RUN mkdir -p /app/uploads/pricelist /app/uploads/partners /app/uploads/products && \
+    chown -R nextjs:nodejs /app/uploads
 
 # Switch to non-root user
 USER nextjs

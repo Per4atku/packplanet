@@ -33,17 +33,25 @@ export async function uploadPriceList(formData: FormData) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    const uploadDir = join(process.cwd(), "public/uploads/pricelist");
+    // Use the uploads directory that's mounted as a volume
+    const uploadDir = join(process.cwd(), "uploads/pricelist");
+
+    // Ensure directory exists with proper permissions
     await mkdir(uploadDir, { recursive: true });
 
     // Delete all existing files in the pricelist directory
-    const existingFiles = await readdir(uploadDir);
-    for (const existingFile of existingFiles) {
-      try {
-        await unlink(join(uploadDir, existingFile));
-      } catch (error) {
-        console.error(`Failed to delete file: ${existingFile}`, error);
+    try {
+      const existingFiles = await readdir(uploadDir);
+      for (const existingFile of existingFiles) {
+        try {
+          await unlink(join(uploadDir, existingFile));
+        } catch (error) {
+          console.error(`Failed to delete file: ${existingFile}`, error);
+        }
       }
+    } catch (error) {
+      // Directory might not exist yet, that's ok
+      console.log("No existing files to delete");
     }
 
     // Delete all existing price list records from database
@@ -66,7 +74,8 @@ export async function uploadPriceList(formData: FormData) {
     return { success: true };
   } catch (error) {
     console.error("Upload error:", error);
-    return { error: "Failed to upload price list" };
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    return { error: `Failed to upload price list: ${errorMessage}` };
   }
 }
 
@@ -84,7 +93,9 @@ export async function deletePriceList(id: string) {
   if (priceList) {
     // Delete file from filesystem
     try {
-      const filepath = join(process.cwd(), "public", priceList.path);
+      // Remove leading slash and use uploads directory
+      const relativePath = priceList.path.startsWith('/') ? priceList.path.substring(1) : priceList.path;
+      const filepath = join(process.cwd(), relativePath);
       await unlink(filepath);
     } catch (error) {
       console.error("Failed to delete file:", error);
