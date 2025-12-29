@@ -9,6 +9,7 @@ import Link from "next/link";
 import {
   getFeaturedProducts,
   getLatestPriceList,
+  getPartners,
 } from "@/lib/queries/products";
 import { getMainContent } from "@/lib/content";
 import {
@@ -29,10 +30,11 @@ export const dynamic = 'force-dynamic';
 export default async function Home() {
   const content = getMainContent();
 
-  // Fetch featured products and latest price list
-  const [featuredProducts, priceList] = await Promise.all([
+  // Fetch featured products, latest price list, and partners
+  const [featuredProducts, priceList, partners] = await Promise.all([
     getFeaturedProducts(3),
     getLatestPriceList(),
+    getPartners(),
   ]);
   return (
     <main className="min-h-screen">
@@ -159,38 +161,28 @@ export default async function Home() {
       <Space size="2xl" />
 
       {/* Partners Section */}
-      <section className="containerize py-12 md:py-16">
-        <FadeIn>
-          <SectionHeading>{content.partners.heading}</SectionHeading>
-        </FadeIn>
+      {partners.length > 0 && (
+        <section className="containerize py-12 md:py-16">
+          <FadeIn>
+            <SectionHeading>{content.partners.heading}</SectionHeading>
+          </FadeIn>
 
-        <StaggerContainer
-          className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
-          staggerDelay={0.15}
-        >
-          <StaggerItem>
-            <PartnerCard
-              name="AlphaCoffee"
-              description="Поддержка сетевых столовых и точек кофеен партнера упаковки"
-              image="/partners/alphacoffee.jpg"
-            />
-          </StaggerItem>
-          <StaggerItem>
-            <PartnerCard
-              name="Дальневбуз"
-              description="Что-то Тулы-е, се Таро (Талье) про что-то писания старые"
-              image="/partners/dalnevbuz.jpg"
-            />
-          </StaggerItem>
-          <StaggerItem>
-            <PartnerCard
-              name="Черная Каракатица"
-              description="Советую посетить-повседневный снабжении Далле"
-              image="/partners/karakatica.jpg"
-            />
-          </StaggerItem>
-        </StaggerContainer>
-      </section>
+          <StaggerContainer
+            className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
+            staggerDelay={0.15}
+          >
+            {partners.map((partner) => (
+              <StaggerItem key={partner.id}>
+                <PartnerCard
+                  name={partner.name}
+                  description={partner.description}
+                  image={partner.image}
+                />
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
+        </section>
+      )}
 
       <Space size="2xl" />
 

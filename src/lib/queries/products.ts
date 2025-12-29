@@ -208,3 +208,17 @@ export const getLatestPriceList = cache(async () => {
 
   return priceList;
 });
+
+/**
+ * Fetch all partners
+ * Cached - partners change infrequently
+ */
+export const getPartners = cache(async () => {
+  const partners = await prisma.partner.findMany({
+    orderBy: {
+      name: "asc",
+    },
+  });
+
+  return partners;
+});
