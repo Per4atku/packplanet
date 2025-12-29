@@ -221,8 +221,8 @@ export const getLatestPriceList = cache(async () => {
     const pathParts = priceList.path.split("/");
     const actualFilename = pathParts[pathParts.length - 1];
 
-    // Files are stored in public/uploads/pricelist/
-    const filePath = path.join(process.cwd(), "public", "uploads", "pricelist", actualFilename);
+    // Files are stored in uploads/pricelist/
+    const filePath = path.join(process.cwd(), "uploads", "pricelist", actualFilename);
     const stats = await fs.stat(filePath);
     fileSize = stats.size;
   } catch (error) {

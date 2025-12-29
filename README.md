@@ -325,11 +325,11 @@ docker-compose down
 
 The application uses mounted volumes for file uploads:
 
-- `/app/public/uploads/partners/` - Partner images
-- `/app/public/uploads/products/` - Product images
-- `/app/public/uploads/price-lists/` - Price list files
+- `/app/uploads/partners/` - Partner images
+- `/app/uploads/products/` - Product images
+- `/app/uploads/pricelist/` - Price list files
 
-Ensure these directories have appropriate write permissions.
+These directories are created by the Dockerfile with appropriate permissions and mounted as a Docker volume.
 
 
 ---

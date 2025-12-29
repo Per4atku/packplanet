@@ -18,7 +18,6 @@ export async function POST(request: Request) {
 
     const uploadDir = path.join(
       process.cwd(),
-      "public",
       "uploads",
       "pricelist"
     );
@@ -41,7 +40,6 @@ export async function POST(request: Request) {
     if (existingPriceList) {
       const oldFilePath = path.join(
         process.cwd(),
-        "public",
         existingPriceList.path
       );
       if (existsSync(oldFilePath)) {

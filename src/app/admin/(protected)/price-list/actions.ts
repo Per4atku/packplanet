@@ -33,8 +33,8 @@ export async function uploadPriceList(formData: FormData) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Use public/uploads directory for storing files
-    const uploadDir = join(process.cwd(), "public/uploads/pricelist");
+    // Use uploads directory for storing files
+    const uploadDir = join(process.cwd(), "uploads/pricelist");
 
     // Ensure directory exists with proper permissions
     await mkdir(uploadDir, { recursive: true });
@@ -96,7 +96,7 @@ export async function deletePriceList(id: string) {
       // Extract filename from path
       const pathParts = priceList.path.split("/");
       const filename = pathParts[pathParts.length - 1];
-      const filepath = join(process.cwd(), "public/uploads/pricelist", filename);
+      const filepath = join(process.cwd(), "uploads/pricelist", filename);
       await unlink(filepath);
     } catch (error) {
       console.error("Failed to delete file:", error);

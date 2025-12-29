@@ -8,7 +8,7 @@ export async function GET(
 ) {
   try {
     const { filename } = await params;
-    const filepath = join(process.cwd(), "public/uploads/pricelist", filename);
+    const filepath = join(process.cwd(), "uploads/pricelist", filename);
 
     const fileBuffer = await readFile(filepath);
 
