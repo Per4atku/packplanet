@@ -27,7 +27,7 @@ export function CategoryForm({ category, content }: CategoryFormProps) {
   };
 
   return (
-    <Card>
+    <Card className="overflow-hidden">
       <CardContent className="pt-6">
         <form action={handleSubmit} className="space-y-6">
           <div className="space-y-2">

@@ -315,80 +315,82 @@ export function AdminDataTable<TData, TValue>({
       )}
 
       {/* Table */}
-      <div className="overflow-hidden rounded-lg border border-neutral-200 bg-white">
-        <DndContext
-          collisionDetection={closestCenter}
-          modifiers={[restrictToVerticalAxis]}
-          onDragEnd={handleDragEnd}
-          sensors={sensors}
-          id={sortableId}
-        >
-          <Table>
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow
-                  key={headerGroup.id}
-                  className="bg-neutral-50 hover:bg-neutral-50 border-neutral-200"
-                >
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <TableHead
-                        key={header.id}
-                        colSpan={header.colSpan}
-                        className="font-semibold text-neutral-900"
-                      >
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </TableHead>
-                    );
-                  })}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                <SortableContext
-                  items={dataIds}
-                  strategy={verticalListSortingStrategy}
-                >
-                  {table.getRowModel().rows.map((row) => (
-                    <DraggableRow
-                      key={row.id}
-                      row={row}
-                      enableDragDrop={enableDragDrop}
-                      onRowClick={onRowClick}
-                    />
-                  ))}
-                </SortableContext>
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columnsWithDragHandle.length}
-                    className="h-32 text-center text-neutral-500"
+      <div className="rounded-lg border border-neutral-200 bg-white overflow-hidden">
+        <div className="overflow-x-auto">
+          <DndContext
+            collisionDetection={closestCenter}
+            modifiers={[restrictToVerticalAxis]}
+            onDragEnd={handleDragEnd}
+            sensors={sensors}
+            id={sortableId}
+          >
+            <Table>
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow
+                    key={headerGroup.id}
+                    className="bg-neutral-50 hover:bg-neutral-50 border-neutral-200"
                   >
-                    No results found.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </DndContext>
+                    {headerGroup.headers.map((header) => {
+                      return (
+                        <TableHead
+                          key={header.id}
+                          colSpan={header.colSpan}
+                          className="font-semibold text-neutral-900 whitespace-nowrap"
+                        >
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                        </TableHead>
+                      );
+                    })}
+                  </TableRow>
+                ))}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows?.length ? (
+                  <SortableContext
+                    items={dataIds}
+                    strategy={verticalListSortingStrategy}
+                  >
+                    {table.getRowModel().rows.map((row) => (
+                      <DraggableRow
+                        key={row.id}
+                        row={row}
+                        enableDragDrop={enableDragDrop}
+                        onRowClick={onRowClick}
+                      />
+                    ))}
+                  </SortableContext>
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columnsWithDragHandle.length}
+                      className="h-32 text-center text-neutral-500"
+                    >
+                      No results found.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </DndContext>
+        </div>
       </div>
 
       {/* Pagination */}
-      <div className="flex items-center justify-between px-2">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between px-2">
         <div className="hidden text-sm text-neutral-600 lg:block">
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
           {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
 
-        <div className="flex w-full items-center gap-6 lg:w-auto lg:gap-8">
+        <div className="flex flex-col gap-4 w-full md:flex-row md:items-center md:w-auto md:gap-6 lg:gap-8">
           <div className="flex items-center gap-2">
-            <Label htmlFor="rows-per-page" className="text-sm font-medium">
+            <Label htmlFor="rows-per-page" className="text-sm font-medium whitespace-nowrap">
               Rows per page
             </Label>
             <Select
@@ -402,7 +404,7 @@ export function AdminDataTable<TData, TValue>({
                   placeholder={table.getState().pagination.pageSize}
                 />
               </SelectTrigger>
-              <SelectContent side="top">
+              <SelectContent side="top" align="end">
                 {[10, 20, 30, 40, 50].map((pageSize) => (
                   <SelectItem key={pageSize} value={`${pageSize}`}>
                     {pageSize}
@@ -412,12 +414,12 @@ export function AdminDataTable<TData, TValue>({
             </Select>
           </div>
 
-          <div className="flex items-center justify-center text-sm font-medium">
+          <div className="flex items-center justify-center text-sm font-medium whitespace-nowrap">
             Page {table.getState().pagination.pageIndex + 1} of{" "}
             {table.getPageCount()}
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 justify-center">
             <Button
               variant="outline"
               className="hidden h-8 w-8 p-0 lg:flex"

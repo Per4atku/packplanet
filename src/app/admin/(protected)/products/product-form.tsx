@@ -70,7 +70,7 @@ export function ProductForm({ product, categories, content }: ProductFormProps) 
   };
 
   return (
-    <Card>
+    <Card className="overflow-hidden">
       <CardContent className="pt-6">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid gap-6 md:grid-cols-2">
@@ -135,7 +135,7 @@ export function ProductForm({ product, categories, content }: ProductFormProps) 
                 <SelectTrigger>
                   <SelectValue placeholder={content.productForm.fields.categoryPlaceholder} />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent position="popper" sideOffset={4}>
                   {categories.map((category) => (
                     <SelectItem key={category.id} value={category.id}>
                       {category.name}
@@ -204,7 +204,7 @@ export function ProductForm({ product, categories, content }: ProductFormProps) 
           {product && product.images.length > 0 && (
             <div className="space-y-2">
               <Label>{content.productForm.fields.currentImages}</Label>
-              <div className="grid grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                 {product.images.map((imagePath) => (
                   <div key={imagePath} className="relative aspect-square">
                     <Image
@@ -216,7 +216,7 @@ export function ProductForm({ product, categories, content }: ProductFormProps) 
                     <button
                       type="button"
                       onClick={() => handleRemoveImage(imagePath)}
-                      className="absolute -right-2 -top-2 rounded-full bg-destructive p-1 text-white"
+                      className="absolute -right-2 -top-2 rounded-full bg-destructive p-1 text-white shadow-lg hover:bg-destructive/90 transition-colors"
                     >
                       <X className="h-4 w-4" />
                     </button>
