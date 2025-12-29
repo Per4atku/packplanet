@@ -5,8 +5,10 @@ const nextConfig: NextConfig = {
   output: "standalone",
 
   // Configure Server Actions
-  serverActions: {
-    bodySizeLimit: '20mb', // Increase from default 1mb to 20mb for image uploads
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "20mb", // Increase from default 1mb to 20mb for image uploads
+    },
   },
 };
 
