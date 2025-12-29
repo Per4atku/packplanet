@@ -204,9 +204,7 @@ export function ProductMultiSelect({
                             <span className="text-sm font-medium truncate">
                               {product.name}
                             </span>
-                            <span className="text-xs text-white">
-                              {product.sku}
-                            </span>
+                            <span className="text-xs ">{product.sku}</span>
                           </div>
                         </div>
                       </CommandItem>
