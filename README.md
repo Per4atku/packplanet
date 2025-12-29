@@ -132,7 +132,7 @@ Before setting up the project, ensure you have the following installed:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/packplanet.git
+git clone https://github.com/per4atku/packplanet.git
 cd packplanet
 ```
 
@@ -331,23 +331,6 @@ The application uses mounted volumes for file uploads:
 
 Ensure these directories have appropriate write permissions.
 
-## Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Support
-
-For issues, questions, or contributions, please open an issue on GitHub.
 
 ---
 
