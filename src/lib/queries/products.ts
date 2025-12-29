@@ -196,7 +196,7 @@ export const getFeaturedProducts = cache(async (limit = 3) => {
 });
 
 /**
- * Fetch the latest price list file
+ * Fetch the latest price list file with file size
  * Cached - price lists change infrequently
  */
 export const getLatestPriceList = cache(async () => {
@@ -206,7 +206,33 @@ export const getLatestPriceList = cache(async () => {
     },
   });
 
-  return priceList;
+  if (!priceList) {
+    return null;
+  }
+
+  // Get file size from filesystem
+  let fileSize = 0;
+  try {
+    const fs = await import("fs/promises");
+    const path = await import("path");
+
+    // Extract filename from path (path includes the prefixed filename)
+    // Path format: /uploads/pricelist/pricelist-timestamp-filename.ext
+    const pathParts = priceList.path.split("/");
+    const actualFilename = pathParts[pathParts.length - 1];
+
+    // Files are stored in public/uploads/pricelist/
+    const filePath = path.join(process.cwd(), "public", "uploads", "pricelist", actualFilename);
+    const stats = await fs.stat(filePath);
+    fileSize = stats.size;
+  } catch (error) {
+    console.error("Error getting file size:", error);
+  }
+
+  return {
+    ...priceList,
+    fileSize,
+  };
 });
 
 /**

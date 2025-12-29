@@ -7,74 +7,64 @@ datasource db {
   provider = "postgresql"
 }
 
-model Category {
-  id       String    @id @default(cuid())
-  name     String    @unique
-  products Product[]
-
-  @@map("categories")
+model categories {
+  id       String     @id
+  name     String     @unique
+  products products[]
 }
 
-model Product {
-  id               String   @id @default(cuid())
-  sku              String   @unique
+model partners {
+  id          String @id
+  name        String
+  description String @default("")
+  image       String @default("")
+}
+
+model price_lists {
+  id         String   @id
+  filename   String
+  path       String
+  uploadedAt DateTime @default(now())
+}
+
+model products {
+  id               String     @id
+  sku              String     @unique
   name             String
   price            Float
   unit             String
   categoryId       String
-  description      String   @default("")
-  images           String[] @default([])
+  description      String     @default("")
+  images           String[]   @default([])
   wholesalePrice   Float?
   wholesaleAmount  Int?
-  heatProduct      Boolean  @default(false)
-  linkedProductIds String[] @default([])
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  category         Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  heatProduct      Boolean    @default(false)
+  linkedProductIds String[]   @default([])
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime
+  categories       categories @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
-  @@index([categoryId])
-  @@index([sku])
-  @@index([name])
-  @@index([heatProduct])
   @@index([categoryId, heatProduct])
+  @@index([categoryId])
   @@index([createdAt(sort: Desc)])
-  @@map("products")
+  @@index([heatProduct])
+  @@index([name])
+  @@index([sku])
 }
 
-model Partner {
-  id          String @id @default(cuid())
-  name        String
-  description String @default("")
-  image       String @default("")
-
-  @@map("partners")
-}
-
-model PriceList {
-  id         String   @id @default(cuid())
-  filename   String
-  path       String
-  uploadedAt DateTime @default(now())
-
-  @@map("price_lists")
-}
-
-model User {
-  id             String    @id @default(cuid())
-  username       String    @unique
-  hashedPassword String
-  createdAt      DateTime  @default(now())
-  sessions       Session[]
-
-  @@map("users")
-}
-
-model Session {
+model sessions {
   id        String   @id
   userId    String
   expiresAt DateTime
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  users     users    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
-  @@map("sessions")
+}
+
+model users {
+  id             String     @id
+  username       String     @unique
+  hashedPassword String
+  createdAt      DateTime   @default(now())
+  sessions       sessions[]
 }

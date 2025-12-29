@@ -52,6 +52,7 @@ export interface MainContent {
     heading: string;
     description: string;
     downloadButton: string;
+    viewOnlineButton: string;
   };
   partners: {
     heading: string;

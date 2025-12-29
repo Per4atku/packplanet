@@ -4,8 +4,9 @@ import { CatalogCTACard } from "@/components/catalog-cta-card";
 import { PartnerCard } from "@/components/partner-card";
 import { SectionHeading } from "@/components/section-heading";
 import { Space } from "@/components/space";
-import { Download, Mail, MapPin, Phone, Clock, Package } from "lucide-react";
+import { Download, Mail, MapPin, Phone, Clock, Package, Eye } from "lucide-react";
 import Link from "next/link";
+import { formatFileSize } from "@/lib/utils";
 import {
   getFeaturedProducts,
   getLatestPriceList,
@@ -122,12 +123,30 @@ export default async function Home() {
               <p className="mb-8 text-lg text-muted-foreground">
                 {content.priceList.description}
               </p>
-              <Button size="lg" className="w-full sm:w-auto" asChild>
-                <a href={priceList.path} download={priceList.filename}>
-                  <Download className="mr-2 h-5 w-5" />
-                  {content.priceList.downloadButton}
-                </a>
-              </Button>
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <Button size="lg" className="w-full sm:w-auto" asChild>
+                  <a href={priceList.path} download={priceList.filename}>
+                    <Download className="mr-2 h-5 w-5" />
+                    {content.priceList.downloadButton}
+                    {priceList.fileSize > 0 && (
+                      <span className="ml-1 opacity-80">
+                        ({formatFileSize(priceList.fileSize)})
+                      </span>
+                    )}
+                  </a>
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="w-full sm:w-auto"
+                  asChild
+                >
+                  <Link href="/price-list">
+                    <Eye className="mr-2 h-5 w-5" />
+                    {content.priceList.viewOnlineButton}
+                  </Link>
+                </Button>
+              </div>
             </FadeIn>
 
             <FadeIn direction="right" delay={0.2}>

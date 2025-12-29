@@ -38,6 +38,7 @@ priceList:
   heading: "Прайс-Лист"
   description: "Скачайте актуальный прайс-лист со всей продукцией и ценами"
   downloadButton: "Скачать прайс-лист"
+  viewOnlineButton: "Посмотреть онлайн"
 
 # Partners Section
 partners:
