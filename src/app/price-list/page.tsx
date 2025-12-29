@@ -63,10 +63,9 @@ export default async function PriceListPage() {
       throw new Error("Unsupported file format");
     }
 
-    // Read file from filesystem (files are stored in public/uploads/pricelist/)
+    // Read file from filesystem (files are stored in uploads/pricelist/)
     const filePath = join(
       process.cwd(),
-      "public",
       "uploads",
       "pricelist",
       actualFilename
