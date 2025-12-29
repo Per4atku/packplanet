@@ -5,10 +5,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Package, LogOut, Menu, X } from "lucide-react";
+import { Package, LogOut, Menu, X, FolderTree, Handshake, FileText } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { AdminContent } from "@/lib/content";
 import { cn } from "@/lib/utils";
+import { logout } from "@/app/admin/(auth)/login/actions";
 
 interface NavItem {
   href: string;
@@ -21,19 +22,38 @@ interface AdminSidebarProps {
     username: string;
   };
   content: AdminContent;
-  navItems: NavItem[];
-  logoutAction: () => void;
 }
 
 export function AdminSidebar({
   user,
   content,
-  navItems,
-  logoutAction,
 }: AdminSidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const pathname = usePathname();
+
+  const navItems: NavItem[] = [
+    {
+      href: "/admin/products",
+      icon: Package,
+      label: content.navigation.products,
+    },
+    {
+      href: "/admin/categories",
+      icon: FolderTree,
+      label: content.navigation.categories,
+    },
+    {
+      href: "/admin/partners",
+      icon: Handshake,
+      label: content.navigation.partners,
+    },
+    {
+      href: "/admin/price-list",
+      icon: FileText,
+      label: content.navigation.priceList,
+    },
+  ];
 
   return (
     <>
@@ -142,7 +162,7 @@ export function AdminSidebar({
                 </p>
               </div>
             )}
-            <form action={logoutAction}>
+            <form action={logout}>
               <Button
                 variant="ghost"
                 size="icon"
