@@ -162,7 +162,7 @@ export function HeaderAnimated({
               </nav>
               <div className="mt-auto pt-8 border-t">
                 <a
-                  href="tel:+78002347876"
+                  href="tel:+78002347875"
                   className="flex items-center gap-3 text-base font-semibold text-foreground  transition-colors py-4 px-4 rounded-lg active:bg-accent/80"
                 >
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">

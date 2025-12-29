@@ -12,7 +12,7 @@ import { ProductDecisionZone } from "@/components/product/ProductDecisionZone";
 import { ProductCharacteristics } from "@/components/product/ProductCharacteristics";
 
 // Force dynamic rendering - this page needs fresh data from database
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 interface ProductPageProps {
   params: Promise<{ id: string }>;
@@ -30,7 +30,7 @@ export async function generateMetadata({
     };
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://packplanet.ru";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://pack-planet.ru";
   const productUrl = `${baseUrl}/products/${id}`;
   const productImage = product.images[0] || `${baseUrl}/og-image.jpg`;
 
@@ -85,7 +85,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       ? await getLinkedProducts(product.linkedProductIds)
       : [];
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://packplanet.ru";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://pack-planet.ru";
 
   return (
     <main className="min-h-screen">
