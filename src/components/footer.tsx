@@ -1,6 +1,7 @@
 import { Phone, Mail, MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { getAllPhones } from "@/lib/phones";
 
 const navLinks = [
   { href: "/", name: "Главная" },
@@ -9,11 +10,7 @@ const navLinks = [
   { href: "/#delivery", name: "Условия Доставки" },
   { href: "/#contacts", name: "Наши Контакты" },
 ];
-const phones = [
-  "8 (800) 234-78-75",
-  "+7 (423) 245-78-75",
-  "+7 (423) 244-65-55",
-];
+const phones = getAllPhones();
 
 export const Footer = () => {
   return (
@@ -64,10 +61,24 @@ export const Footer = () => {
           <div>
             <h4 className="font-semibold mb-4 text-eco-green">Контакты</h4>
             <div className="space-y-3 text-sm">
-              <div className="flex items-center space-x-2">
-                <Phone className="w-4 h-4 text-eco-green" />
-                <span className="text-gray-300">{phones[0]}</span>
-              </div>
+              {phones.map((phone, index) => (
+                <div key={index} className="flex items-start space-x-2">
+                  <Phone className="w-4 h-4 text-eco-green mt-0.5" />
+                  <div className="text-gray-300">
+                    <a
+                      href={`tel:${phone.href}`}
+                      className="hover:text-white transition-colors"
+                    >
+                      {phone.display}
+                    </a>
+                    {phone.label && (
+                      <span className="block text-xs text-gray-400">
+                        {phone.label}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
               <div className="flex items-center space-x-2">
                 <Mail className="w-4 h-4 text-eco-green" />
                 <span className="text-gray-300">pack-w@mail.ru</span>

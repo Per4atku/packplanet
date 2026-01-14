@@ -1,4 +1,5 @@
 import Script from "next/script";
+import { getPrimaryPhone } from "@/lib/phones";
 
 interface OrganizationSchema {
   "@context": "https://schema.org";
@@ -26,6 +27,7 @@ interface OrganizationSchema {
 }
 
 export function OrganizationStructuredData() {
+  const primaryPhone = getPrimaryPhone();
   const structuredData: OrganizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -45,7 +47,7 @@ export function OrganizationStructuredData() {
     contactPoint: [
       {
         "@type": "ContactPoint",
-        telephone: "+7-XXX-XXX-XX-XX",
+        telephone: primaryPhone.href,
         contactType: "customer service",
         areaServed: "RU",
         availableLanguage: "Russian",

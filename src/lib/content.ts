@@ -85,7 +85,10 @@ export interface MainContent {
       label: string;
       value: string;
     };
-    mapButton: string;
+    mapButtons: {
+      yandex: string;
+      gis: string;
+    };
   };
   footer: {
     quickLinks: {

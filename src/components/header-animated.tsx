@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Phone, Menu, X } from "lucide-react";
+import { Phone, Menu, X, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
@@ -12,13 +12,19 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { getAllPhones } from "@/lib/phones";
 
 interface HeaderAnimatedProps {
   siteName: string;
   siteShortName: string;
-  phone: string;
   nav: {
     catalog: string;
     priceList: string;
@@ -30,10 +36,11 @@ interface HeaderAnimatedProps {
 export function HeaderAnimated({
   siteName,
   siteShortName,
-  phone,
   nav,
 }: HeaderAnimatedProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isPhoneDialogOpen, setIsPhoneDialogOpen] = useState(false);
+  const phones = getAllPhones();
 
   return (
     <motion.header
@@ -42,8 +49,8 @@ export function HeaderAnimated({
       transition={{ duration: 0.5, ease: "easeOut" }}
       className="sticky rounded-full top-4 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60"
     >
-      <div className="containerize flex h-16 items-center justify-between md:h-20">
-        <Link href="/" className="flex items-center gap-2 group">
+      <div className="containerize relative flex h-16 items-center justify-between md:h-20">
+        <Link href="/" className="flex items-center gap-2 group z-10">
           <motion.div
             whileHover={{ scale: 1.05, rotate: 5 }}
             transition={{ duration: 0.2 }}
@@ -56,8 +63,8 @@ export function HeaderAnimated({
           </span>
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden items-center gap-6 md:flex">
+        {/* Desktop Navigation - centered */}
+        <nav className="hidden items-center gap-6 md:flex absolute left-1/2 -translate-x-1/2">
           <motion.div
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
@@ -104,17 +111,68 @@ export function HeaderAnimated({
           </motion.div>
         </nav>
 
-        <div className="flex items-center gap-3">
-          {/* Phone Link - visible on all screens */}
-          <motion.a
-            href="tel:+78002347875"
-            className="flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-primary"
+        <div className="flex items-center gap-2 z-10">
+          {/* Call to action label with animated arrow */}
+          <button
+            onClick={() => setIsPhoneDialogOpen(true)}
+            className="hidden sm:flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+          >
+            <span>Позвоните нам</span>
+            <motion.div
+              animate={{ x: [0, 4, 0] }}
+              transition={{
+                duration: 1.5,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            >
+              <ArrowRight className="h-4 w-4" />
+            </motion.div>
+          </button>
+
+          {/* Phone Button - opens dialog */}
+          <motion.button
+            onClick={() => setIsPhoneDialogOpen(true)}
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary transition-colors hover:bg-primary/20"
             whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             transition={{ duration: 0.2 }}
           >
             <Phone className="h-4 w-4" />
-            <span className="hidden sm:inline">{phone}</span>
-          </motion.a>
+          </motion.button>
+
+          {/* Phone Dialog */}
+          <Dialog open={isPhoneDialogOpen} onOpenChange={setIsPhoneDialogOpen}>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle>Позвоните нам</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-3 py-4">
+                {phones.map((phone, index) => (
+                  <a
+                    key={index}
+                    href={`tel:${phone.href}`}
+                    className="flex items-center gap-4 p-4 rounded-lg border hover:bg-accent/90 transition-colors group"
+                    onClick={() => setIsPhoneDialogOpen(false)}
+                  >
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 group-hover:bg-white/10 transition-colors">
+                      <Phone className="h-5 w-5 text-primary group-hover:text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-lg font-medium group-hover:text-white">
+                        {phone.display}
+                      </p>
+                      {phone.label && (
+                        <p className="text-sm text-muted-foreground group-hover:text-white">
+                          {phone.label}
+                        </p>
+                      )}
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </DialogContent>
+          </Dialog>
 
           {/* Mobile Menu Button */}
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -160,16 +218,27 @@ export function HeaderAnimated({
                   {nav.contacts}
                 </Link>
               </nav>
-              <div className="mt-auto pt-8 border-t">
-                <a
-                  href="tel:+78002347875"
-                  className="flex items-center gap-3 text-base font-semibold text-foreground  transition-colors py-4 px-4 rounded-lg active:bg-accent/80"
-                >
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                    <Phone className="h-5 w-5 text-primary" />
-                  </div>
-                  <span>{phone}</span>
-                </a>
+              <div className="mt-auto pt-8 border-t space-y-2">
+                {phones.map((phone, index) => (
+                  <a
+                    key={index}
+                    href={`tel:${phone.href}`}
+                    className="flex items-center gap-3 text-base font-semibold text-foreground transition-colors py-3 px-4 rounded-lg active:bg-accent/80"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                      <Phone className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <span>{phone.display}</span>
+                      {phone.label && (
+                        <span className="block text-xs font-normal text-muted-foreground">
+                          {phone.label}
+                        </span>
+                      )}
+                    </div>
+                  </a>
+                ))}
               </div>
             </SheetContent>
           </Sheet>

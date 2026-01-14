@@ -4,7 +4,15 @@ import { CatalogCTACard } from "@/components/catalog-cta-card";
 import { PartnerCard } from "@/components/partner-card";
 import { SectionHeading } from "@/components/section-heading";
 import { Space } from "@/components/space";
-import { Download, Mail, MapPin, Phone, Clock, Package, Eye } from "lucide-react";
+import {
+  Download,
+  Mail,
+  MapPin,
+  Phone,
+  Clock,
+  Package,
+  Eye,
+} from "lucide-react";
 import Link from "next/link";
 import { formatFileSize } from "@/lib/utils";
 import {
@@ -13,6 +21,7 @@ import {
   getPartners,
 } from "@/lib/queries/products";
 import { getMainContent } from "@/lib/content";
+import { getAllPhones } from "@/lib/phones";
 import {
   HeroSection,
   HeroTitle,
@@ -26,7 +35,7 @@ import {
 } from "@/components/animations/stagger-container";
 
 // Force dynamic rendering - this page needs fresh data from database
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const content = getMainContent();
@@ -315,16 +324,21 @@ export default async function Home() {
                     <h4 className="mb-1 font-semibold">
                       {content.contacts.phone.label}
                     </h4>
-                    <div className="space-y-1 text-muted-foreground">
-                      {content.contacts.phone.numbers.map((phone, i) => (
-                        <p key={i}>
+                    <div className="space-y-2 text-muted-foreground">
+                      {getAllPhones().map((phone, i) => (
+                        <div key={i}>
                           <a
-                            href={`tel:${phone.replace(/\s+/g, "")}`}
+                            href={`tel:${phone.href}`}
                             className="hover:text-primary"
                           >
-                            {phone}
+                            {phone.display}
                           </a>
-                        </p>
+                          {phone.label && (
+                            <span className="ml-2 text-xs text-muted-foreground/70">
+                              ({phone.label})
+                            </span>
+                          )}
+                        </div>
                       ))}
                     </div>
                   </div>
@@ -353,16 +367,33 @@ export default async function Home() {
               </StaggerItem>
             </StaggerContainer>
 
-            <Button size="lg" className="mt-8 w-full" asChild>
-              <a
-                href="https://yandex.ru/maps"
-                target="_blank"
-                rel="noopener noreferrer"
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Button size="lg" className="w-full sm:flex-1" asChild>
+                <a
+                  href="https://2gis.ru/vladivostok/firm/3518965489878007"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <MapPin className="mr-2 h-5 w-5" />
+                  {content.contacts.mapButtons.gis}
+                </a>
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="w-full sm:flex-1"
+                asChild
               >
-                <MapPin className="mr-2 h-5 w-5" />
-                {content.contacts.mapButton}
-              </a>
-            </Button>
+                <a
+                  href="https://yandex.ru/maps/org/planeta_upakovki/1022460706"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <MapPin className="mr-2 h-5 w-5" />
+                  {content.contacts.mapButtons.yandex}
+                </a>
+              </Button>
+            </div>
           </div>
         </FadeIn>
       </section>

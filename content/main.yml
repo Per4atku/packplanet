@@ -75,7 +75,9 @@ contacts:
   email:
     label: "Почта"
     value: "pack-w@mail.ru"
-  mapButton: "Перейти в Яндекс-Карты"
+  mapButtons:
+    yandex: "Перейти в Яндекс Карты"
+    gis: "Перейти в 2ГИС"
 
 # Footer
 footer:

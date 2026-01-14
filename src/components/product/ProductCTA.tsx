@@ -10,6 +10,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Phone, Mail, MessageCircle } from "lucide-react";
+import { getPrimaryPhone } from "@/lib/phones";
 
 interface ProductCTAProps {
   productName: string;
@@ -18,6 +19,7 @@ interface ProductCTAProps {
 
 export function ProductCTA({ productName, quantity }: ProductCTAProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const primaryPhone = getPrimaryPhone();
 
   return (
     <>
@@ -38,7 +40,7 @@ export function ProductCTA({ productName, quantity }: ProductCTAProps) {
           <div className="space-y-4 py-4">
             {/* Phone Contact */}
             <a
-              href="tel:+78002347876"
+              href={`tel:${primaryPhone.href}`}
               className="flex items-start gap-4 p-4 rounded-lg border hover:bg-accent transition-colors group"
             >
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
@@ -46,10 +48,12 @@ export function ProductCTA({ productName, quantity }: ProductCTAProps) {
               </div>
               <div className="flex-1">
                 <p className="font-semibold text-sm mb-1">Позвонить</p>
-                <p className="text-lg font-medium">8 (800) 234-78-76</p>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Бесплатный звонок по России
-                </p>
+                <p className="text-lg font-medium">{primaryPhone.display}</p>
+                {primaryPhone.label && (
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {primaryPhone.label}
+                  </p>
+                )}
               </div>
             </a>
 

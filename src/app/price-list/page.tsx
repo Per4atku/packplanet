@@ -6,6 +6,8 @@ import * as XLSX from "xlsx";
 import { readFile } from "fs/promises";
 import { join } from "path";
 import type { Metadata } from "next";
+import { ScrollToTop } from "./scroll-to-top";
+import { CategoryNav } from "./category-nav";
 
 // Force dynamic rendering - this page needs fresh data
 export const dynamic = "force-dynamic";
@@ -44,7 +46,11 @@ export default async function PriceListPage() {
   }
 
   // Parse XLSX file
-  let tableData: { headers: string[]; rows: string[][] } | null = null;
+  let tableData: {
+    headers: string[];
+    rows: { cells: string[]; isCategory: boolean; categoryId?: string }[];
+    categories: { id: string; name: string }[];
+  } | null = null;
   let error: string | null = null;
 
   try {
@@ -88,34 +94,61 @@ export default async function PriceListPage() {
     if (data.length < 2) {
       error = "Прайс-лист пустой или содержит недостаточно данных";
     } else {
-      // Skip first row, use second row as headers
-      // Find maximum number of columns across all rows (excluding first row)
-      const maxCols = Math.max(...data.slice(1).map((row) => row.length));
+      // Define the columns to display based on the sheet structure:
+      // Column 0: Артикул, Column 1: Наименование, Column 2: units (no header), Column 3: Розничная цена
+      const columnMapping = [
+        { index: 0, header: "Артикул" },
+        { index: 1, header: "Наименование" },
+        { index: 2, header: "" }, // Units - no header
+        { index: 3, header: "Розничная цена" },
+      ];
 
-      // Second row (index 1) is headers - ensure we have headers for all columns
-      const headers = Array.from({ length: maxCols }, (_, i) => {
-        const header = data[1]?.[i];
-        return header !== undefined && header !== null && header !== ""
-          ? String(header)
-          : `Колонка ${i + 1}`;
-      });
+      const headers = columnMapping.map((col) => col.header);
+
+      // Helper to create a URL-safe ID from category name
+      const createCategoryId = (name: string, index: number) => {
+        const slug = name
+          .toLowerCase()
+          .replace(/[^\p{L}\p{N}\s-]/gu, "") // Keep letters (any language), numbers, spaces, hyphens
+          .replace(/\s+/g, "-")
+          .replace(/-+/g, "-")
+          .trim();
+        return `category-${index}-${slug || "unnamed"}`;
+      };
+
+      let categoryIndex = 0;
+      const categories: { id: string; name: string }[] = [];
 
       // Get all data rows (skip first two rows: row 0 and header row 1)
-      // Ensure each row has the same number of cells as headers
       const rows = data
         .slice(2)
         .filter((row) =>
           row.some((cell) => cell !== undefined && cell !== null && cell !== "")
         )
         .map((row) => {
-          // Pad row to match header count
-          return Array.from({ length: maxCols }, (_, i) => {
-            const cell = row[i];
+          // Extract only the specified columns
+          const cells = columnMapping.map((col) => {
+            const cell = row[col.index];
             return cell !== undefined && cell !== null ? String(cell) : "";
           });
+
+          // Detect category rows: only first column has data, others are empty
+          const hasFirstColumn = cells[0].trim() !== "";
+          const otherColumnsEmpty = cells
+            .slice(1)
+            .every((cell) => cell.trim() === "");
+          const isCategory = hasFirstColumn && otherColumnsEmpty;
+
+          if (isCategory) {
+            const categoryId = createCategoryId(cells[0], categoryIndex++);
+            categories.push({ id: categoryId, name: cells[0] });
+            return { cells, isCategory, categoryId };
+          }
+
+          return { cells, isCategory };
         });
 
-      tableData = { headers, rows };
+      tableData = { headers, rows, categories };
     }
   } catch (err) {
     console.error("Error parsing XLSX:", err);
@@ -174,24 +207,41 @@ export default async function PriceListPage() {
                 </tr>
               </thead>
               <tbody>
-                {tableData.rows.map((row, rowIndex) => (
-                  <tr
-                    key={rowIndex}
-                    className="border-b last:border-0 hover:bg-muted/30"
-                  >
-                    {tableData.headers.map((_, cellIndex) => (
-                      <td key={cellIndex} className="px-4 py-3 text-sm">
-                        {row[cellIndex] !== undefined && row[cellIndex] !== null
-                          ? String(row[cellIndex])
-                          : ""}
+                {tableData.rows.map((row, rowIndex) =>
+                  row.isCategory ? (
+                    <tr
+                      key={rowIndex}
+                      id={row.categoryId}
+                      className="border-b bg-primary/10 last:border-0 scroll-mt-20"
+                    >
+                      <td
+                        colSpan={tableData.headers.length}
+                        className="px-4 py-3 text-sm font-semibold text-primary"
+                      >
+                        {row.cells[0]}
                       </td>
-                    ))}
-                  </tr>
-                ))}
+                    </tr>
+                  ) : (
+                    <tr
+                      key={rowIndex}
+                      className="border-b last:border-0 hover:bg-muted/30"
+                    >
+                      {row.cells.map((cell, cellIndex) => (
+                        <td key={cellIndex} className="px-4 py-3 text-sm">
+                          {cell}
+                        </td>
+                      ))}
+                    </tr>
+                  )
+                )}
               </tbody>
             </table>
           </div>
         )}
+
+        {/* Navigation components */}
+        {tableData && <CategoryNav categories={tableData.categories} />}
+        <ScrollToTop />
       </div>
     </main>
   );
