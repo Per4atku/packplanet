@@ -119,97 +119,99 @@ export default async function Home() {
         </section>
       )}
 
-      <Space size="2xl" />
-
       {/* Price List Section */}
       {priceList && (
-        <section id="price-list" className="containerize py-12 md:py-16">
-          <div className="grid items-center gap-12 lg:grid-cols-2">
-            <FadeIn direction="left">
-              <h2 className="mb-4 text-4xl font-bold tracking-tight md:text-5xl">
-                {content.priceList.heading}
-              </h2>
-              <p className="mb-8 text-lg text-muted-foreground">
-                {content.priceList.description}
-              </p>
-              <div className="flex flex-col gap-3 sm:flex-row">
-                <Button size="lg" className="w-full sm:w-auto" asChild>
-                  <a href={priceList.path} download={priceList.filename}>
-                    <Download className="mr-2 h-5 w-5" />
-                    {content.priceList.downloadButton}
-                    {priceList.fileSize > 0 && (
-                      <span className="ml-1 opacity-80">
-                        ({formatFileSize(priceList.fileSize)})
-                      </span>
-                    )}
-                  </a>
-                </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="w-full sm:w-auto"
-                  asChild
-                >
-                  <Link href="/price-list">
-                    <Eye className="mr-2 h-5 w-5" />
-                    {content.priceList.viewOnlineButton}
-                  </Link>
-                </Button>
-              </div>
-            </FadeIn>
+        <>
+          <Space size="2xl" />
+          <section id="price-list" className="containerize py-12 md:py-16">
+            <div className="grid items-center gap-12 lg:grid-cols-2">
+              <FadeIn direction="left">
+                <h2 className="mb-4 text-4xl font-bold tracking-tight md:text-5xl">
+                  {content.priceList.heading}
+                </h2>
+                <p className="mb-8 text-lg text-muted-foreground">
+                  {content.priceList.description}
+                </p>
+                <div className="flex flex-col gap-3 sm:flex-row">
+                  <Button size="lg" className="w-full sm:w-auto" asChild>
+                    <a href={priceList.path} download={priceList.filename}>
+                      <Download className="mr-2 h-5 w-5" />
+                      {content.priceList.downloadButton}
+                      {priceList.fileSize > 0 && (
+                        <span className="ml-1 opacity-80">
+                          ({formatFileSize(priceList.fileSize)})
+                        </span>
+                      )}
+                    </a>
+                  </Button>
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="w-full sm:w-auto"
+                    asChild
+                  >
+                    <Link href="/price-list">
+                      <Eye className="mr-2 h-5 w-5" />
+                      {content.priceList.viewOnlineButton}
+                    </Link>
+                  </Button>
+                </div>
+              </FadeIn>
 
-            <FadeIn direction="right" delay={0.2}>
-              <div className="relative flex items-center justify-center">
-                <div className="relative aspect-square w-full max-w-md">
-                  {/* Illustration placeholder - you can replace with actual 3D illustration */}
-                  <div className="flex h-full w-full items-center justify-center rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 p-12">
-                    <div className="relative h-full w-full">
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="flex h-48 w-40 flex-col items-center justify-center rounded-2xl bg-primary/20 shadow-2xl">
-                          <Package className="mb-4 h-16 w-16 text-primary" />
-                          <div className="space-y-2">
-                            <div className="h-2 w-24 rounded-full bg-primary/30"></div>
-                            <div className="h-2 w-20 rounded-full bg-primary/30"></div>
-                            <div className="h-2 w-16 rounded-full bg-primary/30"></div>
+              <FadeIn direction="right" delay={0.2}>
+                <div className="relative flex items-center justify-center">
+                  <div className="relative aspect-square w-full max-w-md">
+                    {/* Illustration placeholder - you can replace with actual 3D illustration */}
+                    <div className="flex h-full w-full items-center justify-center rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 p-12">
+                      <div className="relative h-full w-full">
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="flex h-48 w-40 flex-col items-center justify-center rounded-2xl bg-primary/20 shadow-2xl">
+                            <Package className="mb-4 h-16 w-16 text-primary" />
+                            <div className="space-y-2">
+                              <div className="h-2 w-24 rounded-full bg-primary/30"></div>
+                              <div className="h-2 w-20 rounded-full bg-primary/30"></div>
+                              <div className="h-2 w-16 rounded-full bg-primary/30"></div>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div className="absolute -bottom-4 -right-4 flex h-20 w-20 items-center justify-center rounded-full bg-primary shadow-xl">
-                        <Download className="h-10 w-10 text-white" />
+                        <div className="absolute -bottom-4 -right-4 flex h-20 w-20 items-center justify-center rounded-full bg-primary shadow-xl">
+                          <Download className="h-10 w-10 text-white" />
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </FadeIn>
-          </div>
-        </section>
+              </FadeIn>
+            </div>
+          </section>
+        </>
       )}
-
-      <Space size="2xl" />
 
       {/* Partners Section */}
       {partners.length > 0 && (
-        <section className="containerize py-12 md:py-16">
-          <FadeIn>
-            <SectionHeading>{content.partners.heading}</SectionHeading>
-          </FadeIn>
+        <>
+          <Space size="2xl" />
+          <section className="containerize py-12 md:py-16">
+            <FadeIn>
+              <SectionHeading>{content.partners.heading}</SectionHeading>
+            </FadeIn>
 
-          <StaggerContainer
-            className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
-            staggerDelay={0.15}
-          >
-            {partners.map((partner) => (
-              <StaggerItem key={partner.id}>
-                <PartnerCard
-                  name={partner.name}
-                  description={partner.description}
-                  image={partner.image}
-                />
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
-        </section>
+            <StaggerContainer
+              className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
+              staggerDelay={0.15}
+            >
+              {partners.map((partner) => (
+                <StaggerItem key={partner.id}>
+                  <PartnerCard
+                    name={partner.name}
+                    description={partner.description}
+                    image={partner.image}
+                  />
+                </StaggerItem>
+              ))}
+            </StaggerContainer>
+          </section>
+        </>
       )}
 
       <Space size="2xl" />

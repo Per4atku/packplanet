@@ -23,19 +23,19 @@ export const phones: PhoneNumber[] = [
   {
     display: "+7 (423) 245-78-75",
     href: "+74232457875",
-    label: "Торговый зал",
+    label: "торговый зал",
     isPrimary: true,
   },
   {
     display: "+7 (423) 244-65-66",
     href: "+74232446566",
-    label: "Торговый зал",
+    label: "торговый зал",
     isForCompanies: false,
   },
   {
     display: "+7 (423) 244-99-97",
     href: "+74232449997",
-    label: "Для Юридических лиц",
+    label: "для юридических лиц",
     isForCompanies: true,
   },
 ];
