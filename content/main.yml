@@ -13,7 +13,7 @@ header:
   nav:
     catalog: "Каталог"
     priceList: "Прайс-Лист"
-    delivery: "Условия Доставки"
+    delivery: "Доставка"
     contacts: "Контакты"
   phone: "8 (800) 234-78-76"
 
@@ -85,7 +85,7 @@ footer:
     title: "Разделы сайта"
     catalog: "Каталог"
     priceList: "Прайс-Лист"
-    delivery: "Условия Доставки"
+    delivery: "Доставка"
     contacts: "Контакты"
   contactsSection:
     title: "Контакты"
