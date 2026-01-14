@@ -2,17 +2,23 @@ import { Phone, Mail, MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { getAllPhones } from "@/lib/phones";
+import { getProductCount } from "@/lib/queries/products";
 
-const navLinks = [
+const baseNavLinks = [
   { href: "/", name: "Главная" },
-  { href: "/products", name: "Каталог" },
+  { href: "/products", name: "Каталог", requiresCatalog: true },
   { href: "/#price-list", name: "Прайс-Лист" },
   { href: "/#delivery", name: "Условия Доставки" },
   { href: "/#contacts", name: "Наши Контакты" },
 ];
 const phones = getAllPhones();
 
-export const Footer = () => {
+export const Footer = async () => {
+  const productCount = await getProductCount();
+  const showCatalog = productCount > 0;
+  const navLinks = baseNavLinks.filter(
+    (link) => !link.requiresCatalog || showCatalog
+  );
   return (
     <footer className="bg-gray-900 text-white py-8">
       <div className="container mx-auto px-4">

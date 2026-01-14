@@ -248,3 +248,11 @@ export const getPartners = cache(async () => {
 
   return partners;
 });
+
+/**
+ * Get total product count
+ * Cached - useful for conditional UI rendering
+ */
+export const getProductCount = cache(async () => {
+  return prisma.product.count();
+});

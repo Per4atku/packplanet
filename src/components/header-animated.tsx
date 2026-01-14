@@ -31,12 +31,14 @@ interface HeaderAnimatedProps {
     delivery: string;
     contacts: string;
   };
+  showCatalog?: boolean;
 }
 
 export function HeaderAnimated({
   siteName,
   siteShortName,
   nav,
+  showCatalog = true,
 }: HeaderAnimatedProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isPhoneDialogOpen, setIsPhoneDialogOpen] = useState(false);
@@ -65,17 +67,19 @@ export function HeaderAnimated({
 
         {/* Desktop Navigation - centered */}
         <nav className="hidden items-center gap-6 md:flex absolute left-1/2 -translate-x-1/2">
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            transition={{ duration: 0.2 }}
-          >
-            <Link
-              href="/products"
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+          {showCatalog && (
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.2 }}
             >
-              {nav.catalog}
-            </Link>
-          </motion.div>
+              <Link
+                href="/products"
+                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              >
+                {nav.catalog}
+              </Link>
+            </motion.div>
+          )}
           <motion.div
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
@@ -189,13 +193,15 @@ export function HeaderAnimated({
                 </SheetTitle>
               </SheetHeader>
               <nav className="flex flex-col gap-1">
-                <Link
-                  href="/products"
-                  className="text-base font-medium text-foreground hover:text-primary transition-colors py-2 px-4 rounded-lg hover:bg-accent hover:text-white active:bg-accent/80"
-                  onClick={() => setIsOpen(false)}
-                >
-                  {nav.catalog}
-                </Link>
+                {showCatalog && (
+                  <Link
+                    href="/products"
+                    className="text-base font-medium text-foreground hover:text-primary transition-colors py-2 px-4 rounded-lg hover:bg-accent hover:text-white active:bg-accent/80"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {nav.catalog}
+                  </Link>
+                )}
                 <Link
                   href="/#price-list"
                   className="text-base font-medium text-foreground transition-colors py-2 px-4 rounded-lg hover:bg-accent hover:text-white active:bg-accent/80"
