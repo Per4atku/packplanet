@@ -27,8 +27,8 @@ export const phones: PhoneNumber[] = [
     isPrimary: true,
   },
   {
-    display: "+7 (423) 244-65-66",
-    href: "+74232446566",
+    display: "+7 (423) 244-65-55",
+    href: "+74232446555",
     label: "торговый зал",
     isForCompanies: false,
   },
